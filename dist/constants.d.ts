@@ -1,0 +1,16 @@
+export declare const minSecretLength = 10;
+export declare const hmacAlgorithm = "sha3-256";
+export declare const keySize = 32;
+export declare const cipherAlgorithm = "aes-256-gcm";
+export declare const authTagSize = 16;
+export declare const ivTimestampSize = 6;
+export declare const ivEpochStart = 1577854800000;
+export declare const ivMaxEpochTimestamp = 281474976710655;
+export declare const ivCounterSize = 2;
+export declare const ivMaxCounter = 65535;
+export declare const ivRandomSize = 4;
+export declare const ivSize = 12;
+export declare const padSize = 8;
+export declare const padMinLength = 32;
+export declare const separator = ".";
+export declare const version = "A";
