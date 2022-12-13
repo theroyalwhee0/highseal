@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.unseal = void 0;
 const node_crypto_1 = require("node:crypto");
 const constants_1 = require("./constants");
-const re_valid_encrypted = /^A\.[a-zA-Z0-9\/\+]+\.[a-zA-Z0-9\/\+]+\.[a-zA-Z0-9\/\+]+$/;
+const re_valid_encrypted = /^A\.[a-zA-Z0-9/+]+\.[a-zA-Z0-9/+]+\.[a-zA-Z0-9/+]+$/;
 function unseal(encrypted, key) {
     if (!re_valid_encrypted.test(encrypted)) {
         return [true, ''];

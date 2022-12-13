@@ -3,7 +3,7 @@ import { describe, it } from 'mocha';
 import { createIv } from '../src/iv';
 import {
     ivCounterSize, ivEpochStart, ivMaxCounter,
-    ivRandomSize, ivSize, ivTimestampSize
+    ivRandomSize, ivSize, ivTimestampSize,
 } from '../src/constants';
 
 describe('iv', () => {
@@ -12,14 +12,13 @@ describe('iv', () => {
             expect(createIv).to.be.a('function');
         });
         it('should generate an IV', () => {
-            const now = Date.now();
             const iv = createIv();
             expect(iv).to.be.an.instanceOf(Buffer);
             expect(iv.length).to.equal(ivSize);
             // Timestamp.            
             const timestampBuffer = Buffer.concat([
                 Buffer.alloc(2),
-                iv.subarray(0, ivTimestampSize)
+                iv.subarray(0, ivTimestampSize),
             ]);
             expect(timestampBuffer.length).to.equal(ivTimestampSize + 2);
             const timestampEpoch = timestampBuffer.readBigInt64BE();
@@ -29,7 +28,7 @@ describe('iv', () => {
             expect(timestamp > ivEpochStart).to.be.true;
             expect(timestamp <= Date.now()).to.be.true;
             // Counter.
-            const counterBuffer = iv.subarray(ivTimestampSize, ivTimestampSize + ivCounterSize)
+            const counterBuffer = iv.subarray(ivTimestampSize, ivTimestampSize + ivCounterSize);
             expect(counterBuffer.length).to.equal(ivCounterSize);
             const counter = counterBuffer.readUInt16BE();
             expect(counter >= 0).to.be.true;
@@ -40,9 +39,9 @@ describe('iv', () => {
         });
         it('should generate IV sequences', () => {
             const set = new Set<string>();
-            let lastCounter: number = -1;
-            let lastTimestamp: bigint = -1n;
-            let firstTimestamp: bigint = -1n;
+            let lastCounter = -1;
+            let lastTimestamp = -1n;
+            let firstTimestamp = -1n;
             for (let idx = 0; idx < 1000; idx++) {
                 const iv = createIv();
                 expect(iv).to.be.an.instanceOf(Buffer);
@@ -53,7 +52,7 @@ describe('iv', () => {
                 // Timestamp.            
                 const timestampBuffer = Buffer.concat([
                     Buffer.alloc(2),
-                    iv.subarray(0, ivTimestampSize)
+                    iv.subarray(0, ivTimestampSize),
                 ]);
                 expect(timestampBuffer.length).to.equal(ivTimestampSize + 2);
                 const timestampEpoch = timestampBuffer.readBigInt64BE();
@@ -70,7 +69,7 @@ describe('iv', () => {
                 }
                 lastTimestamp = timestamp;
                 // Counter.
-                const counterBuffer = iv.subarray(ivTimestampSize, ivTimestampSize + ivCounterSize)
+                const counterBuffer = iv.subarray(ivTimestampSize, ivTimestampSize + ivCounterSize);
                 expect(counterBuffer.length).to.equal(ivCounterSize);
                 const counter = counterBuffer.readUInt16BE();
                 expect(counter >= 0).to.be.true;

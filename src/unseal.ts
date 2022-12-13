@@ -1,4 +1,4 @@
-import { createDecipheriv, createHmac } from "node:crypto";
+import { createDecipheriv, createHmac } from 'node:crypto';
 import {
     authTagSize,
     cipherAlgorithm,
@@ -6,10 +6,10 @@ import {
     ivSize,
     padMinLength,
     separator,
-    version
+    version,
 } from './constants';
 
-const re_valid_encrypted = /^A\.[a-zA-Z0-9\/\+]+\.[a-zA-Z0-9\/\+]+\.[a-zA-Z0-9\/\+]+$/;
+const re_valid_encrypted = /^A\.[a-zA-Z0-9/+]+\.[a-zA-Z0-9/+]+\.[a-zA-Z0-9/+]+$/;
 
 export function unseal(encrypted: string, key: string): [boolean, string | undefined] {
     if (!re_valid_encrypted.test(encrypted)) {
@@ -47,7 +47,7 @@ export function unseal(encrypted: string, key: string): [boolean, string | undef
     if (paddingByte === undefined || paddingByte < 0 || paddingByte > padMinLength) {
         return [true, ''];
     }
-    const unpadded = decryptBuffer.subarray(0, -1 * paddingByte)
+    const unpadded = decryptBuffer.subarray(0, -1 * paddingByte);
     const result = unpadded.toString();
     return [false, result];
 }

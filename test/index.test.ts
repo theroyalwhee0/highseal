@@ -24,5 +24,5 @@ describe('seal and unseal', () => {
                 expect(decrypted).to.equal(value);
             }
         });
-    })
+    });
 });

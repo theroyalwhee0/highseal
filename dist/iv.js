@@ -8,10 +8,10 @@ function createIv() {
     // Timestamp, 6 bytes
     const timestamp = Date.now() - constants_1.ivEpochStart;
     if (timestamp < 0) {
-        throw new Error(`Unable to create IV. Timestamp before minimum.`);
+        throw new Error('Unable to create IV. Timestamp before minimum.');
     }
     else if (timestamp > constants_1.ivMaxEpochTimestamp) {
-        throw new Error(`Unable to create IV. Timestamp beyond maximum.`);
+        throw new Error('Unable to create IV. Timestamp beyond maximum.');
     }
     const timestampBigBuffer = Buffer.alloc(8);
     timestampBigBuffer.writeBigInt64BE(BigInt(timestamp));

@@ -15,12 +15,12 @@ export function seal(value: string, secret: string): string {
     const encryptedBytes = Buffer.concat([
         cipher.update(paddedValue),
         cipher.final(),
-    ])
+    ]);
     const iv = ivBytes.toString('base64').replace(/=+$/, '');
     const encrypted = encryptedBytes.toString('base64').replace(/=+$/, '');
     const authTag = cipher.getAuthTag().toString('base64').replace(/=+$/, '');
     const results = [
-        version, authTag, iv, encrypted
+        version, authTag, iv, encrypted,
     ].join(separator);
     return results;
 }
