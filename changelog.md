@@ -19,8 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - Terminal
         - File
         - Command Line
+        - Generated
     - Output To
         - Terminal
         - File
+        - Dotenv File
 - Working seal and unseal.
 - Initial release.

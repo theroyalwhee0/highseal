@@ -6,6 +6,8 @@ export interface ArgvShape {
     [key: string]: unknown;
     _: (string)[];
     $0: string;
+    // General.
+    overwrite: boolean,
     // Secret Source.
     secretEnv: string, // This is the default secret source.
     secretValue?: string,
@@ -16,9 +18,11 @@ export interface ArgvShape {
     inputValue?: string,
     inputFile?: string,
     inputTerminal?: boolean,
+    inputGenerate?: number,
     // Output Target.
     outputTerminal?: boolean,
     outputFile?: string,
+    outputDotenv?: string,
 }
 
 export function getArgv(value?: string[], exit = true): ArgvShape {
@@ -29,6 +33,12 @@ export function getArgv(value?: string[], exit = true): ArgvShape {
         .command('seal [options]', 'Seal a value',
             (yargs) => {
                 return yargs
+                    // General.
+                    .option('overwrite', {
+                        describe: 'Overwrite target key or file.',
+                        type: 'boolean',
+                        default: false
+                    })
                     // Secret Source.
                     .option('secret-env', {
                         describe: 'Specify the name of the environment variable to get the secret from.',
@@ -43,7 +53,7 @@ export function getArgv(value?: string[], exit = true): ArgvShape {
                         type: 'string'
                     })
                     .option('secret-terminal', {
-                        describe: 'Specify that the secret should be pulled from the user terminal.',
+                        describe: 'Specify that the secret should be read from the user terminal.',
                         type: 'boolean'
                     })
                     .check(exclusiveOptions('secret-env', 'secret-value', 'secret-file', 'secret-prompt'))
@@ -61,8 +71,13 @@ export function getArgv(value?: string[], exit = true): ArgvShape {
                         type: 'string'
                     })
                     .option('input-terminal', {
-                        describe: 'Specify that the input should be pulled from the terminal.',
+                        describe: 'Specify that the input should be read from the terminal.',
                         type: 'boolean'
+                    })
+                    .option('input-generate', {
+                        describe: 'Specify that the input should be a generated secret.',
+                        type: 'number',
+                        default: 28
                     })
                     .check(demandExclusiveOptions('input-env', 'input-value', 'input-file', 'input-terminal'))
                     // Output Target.
@@ -71,10 +86,14 @@ export function getArgv(value?: string[], exit = true): ArgvShape {
                         type: 'boolean'
                     })
                     .option('output-file', {
-                        describe: 'Specify that the input should be read from a file.',
+                        describe: 'Specify that the input should be written to a file.',
                         type: 'string'
                     })
-                    .check(demandExclusiveOptions('output-terminal'))
+                    .option('output-dotenv', {
+                        describe: 'Specify that the input should be written to a .env file.',
+                        type: 'string'
+                    })
+                    .check(demandExclusiveOptions('output-terminal', 'output-file', 'output-dotenv'))
                     ;
             })
         .command('unseal [options]', 'Unseal a value',

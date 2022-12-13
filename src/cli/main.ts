@@ -24,12 +24,15 @@ export async function main() {
         switch (command) {
             case 'seal': {
                 // Process seal commands.
-                const [err, unsealed] = await getInput(argv);
-                if (err) {
-                    throw err;
+                const [inputErr, unsealed] = await getInput(argv);
+                if (inputErr) {
+                    throw inputErr;
                 }
                 const sealed = seal(unsealed, secret);
-                await writeOutput(argv, sealed);
+                const [outputErr] = await writeOutput(argv, sealed);
+                if (outputErr) {
+                    throw outputErr;
+                }
                 break;
             }
             case 'unseal': {
@@ -39,7 +42,6 @@ export async function main() {
                     throw err;
                 }
                 const unsealed = unseal(sealed, secret);
-                console.log("@@ unsealed:", err, unsealed);
                 break;
             }
         }
