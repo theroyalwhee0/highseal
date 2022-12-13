@@ -3,6 +3,7 @@ import crypto from 'node:crypto';
 import { ArgvShape } from './argv';
 import { HighSealError } from './error';
 import { readInput } from './helpers';
+import { defaultGenerateLength } from './constants';
 
 export type InputSource = 'env' | 'file' | 'terminal' | 'value' | 'generate'
 
@@ -65,7 +66,7 @@ export async function getInput(argv: ArgvShape): Promise<[Error | undefined, str
             break;
         }
         case 'generate': {
-            const generateLength = argv.inputGenerate;
+            const generateLength = argv.inputGenerate ?? defaultGenerateLength;
             console.info(`> Generating random input of length ${generateLength}`);
             if (generateLength === undefined || generateLength < 1 || generateLength > Number.MAX_SAFE_INTEGER) {
                 err = new HighSealError('Expected input generate length to be specified and valid');

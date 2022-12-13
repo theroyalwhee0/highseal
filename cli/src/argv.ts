@@ -7,7 +7,8 @@ export interface ArgvShape {
     _: (string)[];
     $0: string;
     // General.
-    overwrite: boolean,
+    overwrite: boolean, // This defaults to false.
+    dotenv: boolean, // This defaults to true.
     // Secret Source.
     secretEnv: string, // This is the default secret source.
     secretValue?: string,
@@ -38,6 +39,11 @@ export function getArgv(value?: string[], exit = true): ArgvShape {
                         describe: 'Overwrite target key or file.',
                         type: 'boolean',
                         default: false,
+                    })
+                    .option('dotenv', {
+                        describe: 'Load environment variables from .env file.',
+                        type: 'boolean',
+                        default: true,
                     })
                     // Secret Source.
                     .option('secret-env', {
@@ -77,9 +83,11 @@ export function getArgv(value?: string[], exit = true): ArgvShape {
                     .option('input-generate', {
                         describe: 'Specify that the input should be a generated secret.',
                         type: 'number',
-                        default: 28,
                     })
-                    .check(demandExclusiveOptions('input-env', 'input-value', 'input-file', 'input-terminal'))
+                    .check(demandExclusiveOptions(
+                        'input-env', 'input-value', 'input-file',
+                        'input-terminal', 'input-generate',
+                    ))
                     // Output Target.
                     .option('output-terminal', {
                         describe: 'Specify that the results should be written to the terminal.',
@@ -93,7 +101,9 @@ export function getArgv(value?: string[], exit = true): ArgvShape {
                         describe: 'Specify that the input should be written to a .env file.',
                         type: 'string',
                     })
-                    .check(demandExclusiveOptions('output-terminal', 'output-file', 'output-dotenv'))
+                    .check(demandExclusiveOptions(
+                        'output-terminal', 'output-file', 'output-dotenv'
+                    ))
                     ;
             })
         .command('unseal [options]', 'Unseal a value',

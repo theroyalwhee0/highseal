@@ -20,6 +20,11 @@ function getArgv(value, exit = true) {
             type: 'boolean',
             default: false,
         })
+            .option('dotenv', {
+            describe: 'Load environment variables from .env file.',
+            type: 'boolean',
+            default: true,
+        })
             // Secret Source.
             .option('secret-env', {
             describe: 'Specify the name of the environment variable to get the secret from.',
@@ -58,9 +63,8 @@ function getArgv(value, exit = true) {
             .option('input-generate', {
             describe: 'Specify that the input should be a generated secret.',
             type: 'number',
-            default: 28,
         })
-            .check((0, helpers_2.demandExclusiveOptions)('input-env', 'input-value', 'input-file', 'input-terminal'))
+            .check((0, helpers_2.demandExclusiveOptions)('input-env', 'input-value', 'input-file', 'input-terminal', 'input-generate'))
             // Output Target.
             .option('output-terminal', {
             describe: 'Specify that the results should be written to the terminal.',
