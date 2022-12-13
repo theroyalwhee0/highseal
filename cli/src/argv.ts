@@ -37,7 +37,7 @@ export function getArgv(value?: string[], exit = true): ArgvShape {
                     .option('overwrite', {
                         describe: 'Overwrite target key or file.',
                         type: 'boolean',
-                        default: false
+                        default: false,
                     })
                     // Secret Source.
                     .option('secret-env', {
@@ -46,52 +46,52 @@ export function getArgv(value?: string[], exit = true): ArgvShape {
                     })
                     .option('secret-value', {
                         describe: 'Specify the secret value directly. This is not suggested as it may leak the secret to the system state.',
-                        type: 'string'
+                        type: 'string',
                     })
                     .option('secret-file', {
                         describe: 'Specify that the secret should be read from a file.',
-                        type: 'string'
+                        type: 'string',
                     })
                     .option('secret-terminal', {
                         describe: 'Specify that the secret should be read from the user terminal.',
-                        type: 'boolean'
+                        type: 'boolean',
                     })
                     .check(exclusiveOptions('secret-env', 'secret-value', 'secret-file', 'secret-prompt'))
                     // Input Source.
                     .option('input-env', {
                         describe: 'Specify the name of the environment variable to get the input from.',
-                        type: 'string'
+                        type: 'string',
                     })
                     .option('input-value', {
                         describe: 'Specify the input value directly. This is not suggested as it may leak the secret to the system state.',
-                        type: 'string'
+                        type: 'string',
                     })
                     .option('input-file', {
                         describe: 'Specify that the input should be read from a file.',
-                        type: 'string'
+                        type: 'string',
                     })
                     .option('input-terminal', {
                         describe: 'Specify that the input should be read from the terminal.',
-                        type: 'boolean'
+                        type: 'boolean',
                     })
                     .option('input-generate', {
                         describe: 'Specify that the input should be a generated secret.',
                         type: 'number',
-                        default: 28
+                        default: 28,
                     })
                     .check(demandExclusiveOptions('input-env', 'input-value', 'input-file', 'input-terminal'))
                     // Output Target.
                     .option('output-terminal', {
                         describe: 'Specify that the results should be written to the terminal.',
-                        type: 'boolean'
+                        type: 'boolean',
                     })
                     .option('output-file', {
                         describe: 'Specify that the input should be written to a file.',
-                        type: 'string'
+                        type: 'string',
                     })
                     .option('output-dotenv', {
                         describe: 'Specify that the input should be written to a .env file.',
-                        type: 'string'
+                        type: 'string',
                     })
                     .check(demandExclusiveOptions('output-terminal', 'output-file', 'output-dotenv'))
                     ;

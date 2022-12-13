@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
-import { readDotenv, setDotenvValue, writeDotenv } from "./dotenv";
-import { ArgvShape } from "./argv";
-import { HighSealError } from "./error";
+import { readDotenv, setDotenvValue, writeDotenv } from './dotenv';
+import { ArgvShape } from './argv';
+import { HighSealError } from './error';
 
 export type OutputTarget = 'terminal' | 'file' | 'dotenv';
 
@@ -13,7 +13,7 @@ export function getOutputTarget(argv: ArgvShape): OutputTarget {
     } else if (argv.outputDotenv !== undefined) {
         return 'dotenv';
     }
-    throw new Error(`Expected valid output target to be supplied.`);
+    throw new Error('Expected valid output target to be supplied.');
 }
 
 export async function writeOutput(argv: ArgvShape, sealed: string): Promise<[Error | undefined]> {
@@ -22,14 +22,14 @@ export async function writeOutput(argv: ArgvShape, sealed: string): Promise<[Err
     const outputTarget = getOutputTarget(argv);
     switch (outputTarget) {
         case 'terminal': {
-            console.info(`> Writing output to terminal`);
+            console.info('> Writing output to terminal');
             console.info('> Sealed Value:', sealed);
             break;
         }
         case 'file': {
-            console.info(`> Writing output to file`);
+            console.info('> Writing output to file');
             if (argv.outputFile === undefined) {
-                err = new HighSealError(`Expected output file to be specified`);
+                err = new HighSealError('Expected output file to be specified');
             } else {
                 try {
                     await fs.writeFile(argv.outputFile, sealed, 'utf8');
@@ -40,10 +40,10 @@ export async function writeOutput(argv: ArgvShape, sealed: string): Promise<[Err
             break;
         }
         case 'dotenv': {
-            console.info(`> Writing output to dotenv file`);
+            console.info('> Writing output to dotenv file');
             const key = argv.outputDotenv;
             if (key === undefined) {
-                err = new HighSealError(`Expected dotenv file key to be specified`);
+                err = new HighSealError('Expected dotenv file key to be specified');
             } else {
                 const [_err, config] = await readDotenv();
                 if (key in config.mapping) {
@@ -58,7 +58,7 @@ export async function writeOutput(argv: ArgvShape, sealed: string): Promise<[Err
                 try {
                     await writeDotenv(config);
                 } catch {
-                    err = new HighSealError(`An error occurred writing dotenv file`);
+                    err = new HighSealError('An error occurred writing dotenv file');
                 }
             }
             break;

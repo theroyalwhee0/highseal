@@ -11,7 +11,7 @@ export const re_parse = /^([\w.-]+)(?:\s*=\s*?|:\s+?)/;
 export async function readDotenv(): Promise<[Error | undefined, DotenvContent]> {
     const config: DotenvContent = {
         lines: [],
-        mapping: {}
+        mapping: {},
     };
     try {
         const filePath = path.resolve(process.cwd(), '.env');
@@ -51,7 +51,7 @@ export async function writeDotenv(config: DotenvContent) {
 
 export function serializeDotenv(config: DotenvContent): string {
     let output = '';
-    for (let idx in config.lines) {
+    for (const idx in config.lines) {
         const line = config.lines[idx];
         if (line) {
             output += line + '\n';
