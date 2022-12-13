@@ -22,7 +22,7 @@ function seal(value, secret) {
     const encrypted = encryptedBytes.toString('base64').replace(/=+$/, '');
     const authTag = cipher.getAuthTag().toString('base64').replace(/=+$/, '');
     const results = [
-        constants_1.version, authTag, iv, encrypted
+        constants_1.version, authTag, iv, encrypted,
     ].join(constants_1.separator);
     return results;
 }

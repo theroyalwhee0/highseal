@@ -104,7 +104,7 @@ describe('unseal', () => {
     it('should fail to unseal given malformed input', () => {
         const secret = 'marabou stork';
         // The thrid '.' was removed.
-        const malformed = `A.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFqo2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM`;
+        const malformed = 'A.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFqo2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM';
         const result = unseal(malformed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
@@ -115,7 +115,7 @@ describe('unseal', () => {
     it('should fail to unseal given invalid version', () => {
         const secret = 'marabou stork';
         // Version 'A' was replaced with '+'.
-        const malformed = `+.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFqo2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM`;
+        const malformed = '+.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFqo2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM';
         const result = unseal(malformed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);

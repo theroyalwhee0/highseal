@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises';
-import { readDotenv, setDotenvValue, writeDotenv } from "../dotenv";
+import { readDotenv, setDotenvValue, writeDotenv } from "./dotenv";
 import { ArgvShape } from "./argv";
 import { HighSealError } from "./error";
 

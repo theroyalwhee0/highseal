@@ -43,7 +43,7 @@ describe('pad', () => {
             expect(result.length).to.equal(32);
             expect(Array.from(result)).to.eql([
                 70, 108, 97, 112, 106, 97, 99, 107, // Content
-                ...arrayOf(24) // Padding
+                ...arrayOf(24), // Padding
             ]);
         });
         it('should pad always values', () => {

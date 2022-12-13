@@ -1,6 +1,6 @@
-import { randomBytes } from "node:crypto";
+import { randomBytes } from 'node:crypto';
 import {
-    ivEpochStart, ivMaxCounter, ivMaxEpochTimestamp, ivRandomSize
+    ivEpochStart, ivMaxCounter, ivMaxEpochTimestamp, ivRandomSize,
 } from './constants';
 
 let ivCounter = randomBytes(4).readUInt16BE();
@@ -8,9 +8,9 @@ export function createIv(): Buffer {
     // Timestamp, 6 bytes
     const timestamp = Date.now() - ivEpochStart;
     if (timestamp < 0) {
-        throw new Error(`Unable to create IV. Timestamp before minimum.`);
+        throw new Error('Unable to create IV. Timestamp before minimum.');
     } else if (timestamp > ivMaxEpochTimestamp) {
-        throw new Error(`Unable to create IV. Timestamp beyond maximum.`);
+        throw new Error('Unable to create IV. Timestamp beyond maximum.');
     }
     const timestampBigBuffer = Buffer.alloc(8);
     timestampBigBuffer.writeBigInt64BE(BigInt(timestamp));
