@@ -25,12 +25,15 @@ async function main() {
         switch (command) {
             case 'seal': {
                 // Process seal commands.
-                const [err, unsealed] = await (0, input_1.getInput)(argv);
-                if (err) {
-                    throw err;
+                const [inputErr, unsealed] = await (0, input_1.getInput)(argv);
+                if (inputErr) {
+                    throw inputErr;
                 }
                 const sealed = (0, __1.seal)(unsealed, secret);
-                await (0, output_1.writeOutput)(argv, sealed);
+                const [outputErr] = await (0, output_1.writeOutput)(argv, sealed);
+                if (outputErr) {
+                    throw outputErr;
+                }
                 break;
             }
             case 'unseal': {
@@ -40,7 +43,6 @@ async function main() {
                     throw err;
                 }
                 const unsealed = (0, __1.unseal)(sealed, secret);
-                console.log("@@ unsealed:", err, unsealed);
                 break;
             }
         }

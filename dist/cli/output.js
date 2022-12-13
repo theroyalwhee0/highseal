@@ -4,8 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeOutput = exports.getOutputTarget = void 0;
-const error_1 = require("./error");
 const promises_1 = __importDefault(require("node:fs/promises"));
+const dotenv_1 = require("../dotenv");
+const error_1 = require("./error");
 function getOutputTarget(argv) {
     if (argv.outputTerminal !== undefined) {
         return 'terminal';
@@ -13,11 +14,15 @@ function getOutputTarget(argv) {
     else if (argv.outputFile !== undefined) {
         return 'file';
     }
+    else if (argv.outputDotenv !== undefined) {
+        return 'dotenv';
+    }
     throw new Error(`Expected valid output target to be supplied.`);
 }
 exports.getOutputTarget = getOutputTarget;
 async function writeOutput(argv, sealed) {
     let err;
+    const { overwrite } = argv;
     const outputTarget = getOutputTarget(argv);
     switch (outputTarget) {
         case 'terminal': {
@@ -39,6 +44,32 @@ async function writeOutput(argv, sealed) {
                 }
             }
             break;
+        }
+        case 'dotenv': {
+            console.info(`> Writing output to dotenv file`);
+            const key = argv.outputDotenv;
+            if (key === undefined) {
+                err = new error_1.HighSealError(`Expected dotenv file key to be specified`);
+            }
+            else {
+                const [_err, config] = await (0, dotenv_1.readDotenv)();
+                if (key in config.mapping) {
+                    if (overwrite) {
+                        console.warn(`> Overwriting key "${key}" in dotfile`);
+                    }
+                    else {
+                        err = new error_1.HighSealError(`Key "${key}" already defined in dotfile`);
+                        break;
+                    }
+                }
+                (0, dotenv_1.setDotenvValue)(config, key, sealed);
+                try {
+                    await (0, dotenv_1.writeDotenv)(config);
+                }
+                catch {
+                    err = new error_1.HighSealError(`An error occurred writing dotenv file`);
+                }
+            }
             break;
         }
         default: {

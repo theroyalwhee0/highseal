@@ -14,6 +14,12 @@ function getArgv(value, exit = true) {
         .usage('Usage: $0 <command>')
         .command('seal [options]', 'Seal a value', (yargs) => {
         return yargs
+            // General.
+            .option('overwrite', {
+            describe: 'Overwrite target key or file.',
+            type: 'boolean',
+            default: false
+        })
             // Secret Source.
             .option('secret-env', {
             describe: 'Specify the name of the environment variable to get the secret from.',
@@ -28,7 +34,7 @@ function getArgv(value, exit = true) {
             type: 'string'
         })
             .option('secret-terminal', {
-            describe: 'Specify that the secret should be pulled from the user terminal.',
+            describe: 'Specify that the secret should be read from the user terminal.',
             type: 'boolean'
         })
             .check((0, helpers_2.exclusiveOptions)('secret-env', 'secret-value', 'secret-file', 'secret-prompt'))
@@ -46,8 +52,13 @@ function getArgv(value, exit = true) {
             type: 'string'
         })
             .option('input-terminal', {
-            describe: 'Specify that the input should be pulled from the terminal.',
+            describe: 'Specify that the input should be read from the terminal.',
             type: 'boolean'
+        })
+            .option('input-generate', {
+            describe: 'Specify that the input should be a generated secret.',
+            type: 'number',
+            default: 28
         })
             .check((0, helpers_2.demandExclusiveOptions)('input-env', 'input-value', 'input-file', 'input-terminal'))
             // Output Target.
@@ -56,10 +67,14 @@ function getArgv(value, exit = true) {
             type: 'boolean'
         })
             .option('output-file', {
-            describe: 'Specify that the input should be read from a file.',
+            describe: 'Specify that the input should be written to a file.',
             type: 'string'
         })
-            .check((0, helpers_2.demandExclusiveOptions)('output-terminal'));
+            .option('output-dotenv', {
+            describe: 'Specify that the input should be written to a .env file.',
+            type: 'string'
+        })
+            .check((0, helpers_2.demandExclusiveOptions)('output-terminal', 'output-file', 'output-dotenv'));
     })
         .command('unseal [options]', 'Unseal a value', (yargs) => {
         return yargs;

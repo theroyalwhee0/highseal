@@ -1,20 +1,24 @@
+import fs from 'node:fs/promises';
+import { readDotenv, setDotenvValue, writeDotenv } from "../dotenv";
 import { ArgvShape } from "./argv";
 import { HighSealError } from "./error";
-import fs from 'node:fs/promises';
 
-export type OutputTarget = 'terminal' | 'file';
+export type OutputTarget = 'terminal' | 'file' | 'dotenv';
 
 export function getOutputTarget(argv: ArgvShape): OutputTarget {
     if (argv.outputTerminal !== undefined) {
         return 'terminal';
     } else if (argv.outputFile !== undefined) {
         return 'file';
+    } else if (argv.outputDotenv !== undefined) {
+        return 'dotenv';
     }
     throw new Error(`Expected valid output target to be supplied.`);
 }
 
 export async function writeOutput(argv: ArgvShape, sealed: string): Promise<[Error | undefined]> {
     let err: Error | undefined;
+    const { overwrite } = argv;
     const outputTarget = getOutputTarget(argv);
     switch (outputTarget) {
         case 'terminal': {
@@ -34,6 +38,29 @@ export async function writeOutput(argv: ArgvShape, sealed: string): Promise<[Err
                 }
             }
             break;
+        }
+        case 'dotenv': {
+            console.info(`> Writing output to dotenv file`);
+            const key = argv.outputDotenv;
+            if (key === undefined) {
+                err = new HighSealError(`Expected dotenv file key to be specified`);
+            } else {
+                const [_err, config] = await readDotenv();
+                if (key in config.mapping) {
+                    if (overwrite) {
+                        console.warn(`> Overwriting key "${key}" in dotfile`);
+                    } else {
+                        err = new HighSealError(`Key "${key}" already defined in dotfile`);
+                        break;
+                    }
+                }
+                setDotenvValue(config, key, sealed);
+                try {
+                    await writeDotenv(config);
+                } catch {
+                    err = new HighSealError(`An error occurred writing dotenv file`);
+                }
+            }
             break;
         }
         default: {
