@@ -1,7 +1,7 @@
 {
-  "name": "@theroyalwhee0/highseal",
+  "name": "@theroyalwhee0/highseal-cli",
   "version": "0.0.1",
-  "description": "Seal a Value into an Encrypted String",
+  "description": "HighSeal CLI: Seal a Value into an Encrypted String",
   "main": "dist/index.js",
   "author": "Adam Mill <hismajesty@theroyalwhee.com> (https://www.theroyalwhee.com)",
   "license": "Apache-2.0",
@@ -10,6 +10,9 @@
     "encrypt",
     "decrypt"
   ],
+  "bin": {
+    "highseal": "dist/cli.js"
+  },
   "devDependencies": {
     "@types/chai": "4.3.4",
     "@types/mocha": "10.0.0",
@@ -23,6 +26,9 @@
     "sinon": "14.0.2",
     "ts-node": "10.9.1",
     "typescript": "4.9.3"
+  },
+  "dependencies": {
+    "yargs": "17.6.2"
   },
   "scripts": {
     "build": "tsc",

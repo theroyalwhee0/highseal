@@ -8,5 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added 
-- Working seal and unseal.
+- Secret From
+    - Environment Variable
+    - Terminal
+    - File
+    - Command Line
+- Input From
+    - Environment Variable
+    - Terminal
+    - File
+    - Command Line
+    - Generated
+- Output To
+    - Terminal
+    - File
+    - Dotenv File
+- Working CLI.
 - Initial release.

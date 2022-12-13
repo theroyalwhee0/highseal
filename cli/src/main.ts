@@ -1,18 +1,17 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.main = void 0;
-const __1 = require("..");
-const argv_1 = require("./argv");
-const error_1 = require("./error");
-const input_1 = require("./input");
-const output_1 = require("./output");
-const secret_1 = require("./secret");
-async function main() {
+
+import { seal, unseal } from "@theroyalwhee0/highseal";
+import { getArgv } from "./argv";
+import { HighSealError } from "./error";
+import { getInput } from "./input";
+import { writeOutput } from "./output";
+import { getSecret } from './secret';
+
+export async function main() {
     try {
         // Get command line.
-        const argv = (0, argv_1.getArgv)();
+        const argv = getArgv();
         // Get the secret.
-        const [err, secret] = await (0, secret_1.getSecret)(argv);
+        const [err, secret] = await getSecret(argv);
         if (err) {
             throw err;
         }
@@ -25,12 +24,12 @@ async function main() {
         switch (command) {
             case 'seal': {
                 // Process seal commands.
-                const [inputErr, unsealed] = await (0, input_1.getInput)(argv);
+                const [inputErr, unsealed] = await getInput(argv);
                 if (inputErr) {
                     throw inputErr;
                 }
-                const sealed = (0, __1.seal)(unsealed, secret);
-                const [outputErr] = await (0, output_1.writeOutput)(argv, sealed);
+                const sealed = seal(unsealed, secret);
+                const [outputErr] = await writeOutput(argv, sealed);
                 if (outputErr) {
                     throw outputErr;
                 }
@@ -38,26 +37,22 @@ async function main() {
             }
             case 'unseal': {
                 // Process unseal commands.
-                const [err, sealed] = await (0, input_1.getInput)(argv);
+                const [err, sealed] = await getInput(argv);
                 if (err) {
                     throw err;
                 }
-                const unsealed = (0, __1.unseal)(sealed, secret);
+                const unsealed = unseal(sealed, secret);
                 break;
             }
         }
-    }
-    catch (err) {
-        if (error_1.HighSealError.isHighSealError(err)) {
+    } catch (err) {
+        if (HighSealError.isHighSealError(err)) {
             console.error(`> ERROR: ${err.message}`);
             return process.exit(1);
-        }
-        else {
+        } else {
             throw err;
         }
     }
-    console.info('> Done');
+    console.info('> Done')
     return process.exit(0);
 }
-exports.main = main;
-//# sourceMappingURL=main.js.map
