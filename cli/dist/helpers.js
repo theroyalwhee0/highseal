@@ -1,9 +1,14 @@
-import readline from 'readline';
-
-export function readInput(prompt: string) {
-    return new Promise<string>((resolve) => {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.demandExclusiveOptions = exports.exclusiveOptions = exports.readInput = void 0;
+const readline_1 = __importDefault(require("readline"));
+function readInput(prompt) {
+    return new Promise((resolve) => {
         process.stdout.write(prompt);
-        const rl = readline.createInterface({
+        const rl = readline_1.default.createInterface({
             input: process.stdin,
             output: process.stdout,
         });
@@ -15,12 +20,9 @@ export function readInput(prompt: string) {
         });
     });
 }
-
-
-export type ExclusiveOption = (argv: Record<string, unknown>) => boolean;
-
-export function exclusiveOptions(...options: string[]): ExclusiveOption {
-    return (argv: Record<string, unknown>): boolean => {
+exports.readInput = readInput;
+function exclusiveOptions(...options) {
+    return (argv) => {
         const count = options.filter(option => option in argv).length;
         const lastOption = options.pop();
         if (count > 1) {
@@ -29,16 +31,19 @@ export function exclusiveOptions(...options: string[]): ExclusiveOption {
         return true;
     };
 }
-
-export function demandExclusiveOptions(...options: string[]): ExclusiveOption {
-    return (argv: Record<string, unknown>): boolean => {
+exports.exclusiveOptions = exclusiveOptions;
+function demandExclusiveOptions(...options) {
+    return (argv) => {
         const count = options.filter(option => option in argv).length;
         const lastOption = options.pop();
         if (count < 0) {
             throw new Error(`At least 1 arguments of ${options.join(', ')} and ${lastOption} is required`);
-        } else if (count > 1) {
+        }
+        else if (count > 1) {
             throw new Error(`Arguments ${options.join(', ')} and ${lastOption} are mutually exclusive`);
         }
         return true;
     };
 }
+exports.demandExclusiveOptions = demandExclusiveOptions;
+//# sourceMappingURL=helpers.js.map

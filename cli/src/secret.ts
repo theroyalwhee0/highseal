@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises';
-import { ArgvShape } from "./argv";
+import { ArgvShape } from './argv';
 import { HighSealError } from './error';
 import { readInput } from './helpers';
 
@@ -21,7 +21,7 @@ export function getSecretSource(argv: ArgvShape): SecretSource {
 export async function getSecret(argv: ArgvShape): Promise<[Error | undefined, string]> {
     const secretSource = getSecretSource(argv);
     let err: Error | undefined;
-    let secret: string = '';
+    let secret = '';
     switch (secretSource) {
         case 'env': {
             const secretEnvName = argv.secretEnv ?? 'HISE_SECRET';
@@ -35,19 +35,19 @@ export async function getSecret(argv: ArgvShape): Promise<[Error | undefined, st
             break;
         }
         case 'value': {
-            console.info(`> Pulling secret from command line value`);
+            console.info('> Pulling secret from command line value');
             const secretValue = argv.secretValue;
             if (secretValue === undefined) {
-                err = new HighSealError(`Expected secret value to be specified`);
+                err = new HighSealError('Expected secret value to be specified');
             } else {
                 secret = secretValue;
             }
             break;
         }
         case 'file': {
-            console.log(`> Pulling secret from file`);
+            console.log('> Pulling secret from file');
             if (argv.secretFile === undefined) {
-                err = new HighSealError(`Expected secret file to be specified`);
+                err = new HighSealError('Expected secret file to be specified');
             } else {
                 try {
                     secret = await fs.readFile(argv.secretFile, 'utf8');
@@ -58,7 +58,7 @@ export async function getSecret(argv: ArgvShape): Promise<[Error | undefined, st
             break;
         }
         case 'terminal': {
-            console.info(`> Prompting for secret`);
+            console.info('> Prompting for secret');
             secret = await readInput('> Please enter the secret: ');
             break;
         }
