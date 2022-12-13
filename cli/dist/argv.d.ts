@@ -3,6 +3,7 @@ export interface ArgvShape {
     _: (string)[];
     $0: string;
     overwrite: boolean;
+    dotenv: boolean;
     secretEnv: string;
     secretValue?: string;
     secretFile?: string;

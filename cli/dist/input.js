@@ -8,6 +8,7 @@ const promises_1 = __importDefault(require("node:fs/promises"));
 const node_crypto_1 = __importDefault(require("node:crypto"));
 const error_1 = require("./error");
 const helpers_1 = require("./helpers");
+const constants_1 = require("./constants");
 function getInputSource(argv) {
     if (argv.inputValue !== undefined) {
         return 'value';
@@ -74,7 +75,7 @@ async function getInput(argv) {
             break;
         }
         case 'generate': {
-            const generateLength = argv.inputGenerate;
+            const generateLength = argv.inputGenerate ?? constants_1.defaultGenerateLength;
             console.info(`> Generating random input of length ${generateLength}`);
             if (generateLength === undefined || generateLength < 1 || generateLength > Number.MAX_SAFE_INTEGER) {
                 err = new error_1.HighSealError('Expected input generate length to be specified and valid');

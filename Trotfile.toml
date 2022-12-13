@@ -1,2 +1,0 @@
-[actions]
-cli='npm run build && node dist/cli.js $*'

@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@theroyalwhee0/highseal": "0.0.1",
+    "dotenv": "16.0.3",
     "yargs": "17.6.2"
   },
   "scripts": {

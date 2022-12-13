@@ -1,5 +1,6 @@
 
 import { seal, unseal } from '@theroyalwhee0/highseal';
+import * as dotenv from 'dotenv';
 import { getArgv } from './argv';
 import { HighSealError } from './error';
 import { getInput } from './input';
@@ -10,6 +11,10 @@ export async function main() {
     try {
         // Get command line.
         const argv = getArgv();
+        // Load configuration.
+        if (argv.dotenv) {
+            dotenv.config();
+        }
         // Get the secret.
         const [err, secret] = await getSecret(argv);
         if (err) {
