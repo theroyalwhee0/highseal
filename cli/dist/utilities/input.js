@@ -10,20 +10,20 @@ const readline_1 = __importDefault(require("readline"));
  * @param prompt A prompt to write to stdout.
  * @returns The sting read from stdin.
  */
-function readInput(prompt = '') {
+function readInput(prompt = '', options) {
+    const output = options?.output ?? process.stdout;
+    const input = options?.input ?? process.stdin;
     return new Promise((resolve) => {
         if (prompt) {
-            process.stdout.write(prompt);
+            output.write(prompt);
         }
         const rl = readline_1.default.createInterface({
-            input: process.stdin,
-            output: process.stdout,
+            input: input,
+            output: output,
         });
         rl.on('line', (line) => {
             resolve(line);
-        });
-        rl.once('close', () => {
-            resolve('');
+            rl.close();
         });
     });
 }

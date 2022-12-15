@@ -56,7 +56,7 @@ exports.writeDotenv = writeDotenv;
  */
 function parseDotenv(content) {
     let lines = content === '' ? [] : content.split('\n');
-    if (lines.at(-1) === "") {
+    if (lines.at(-1) === '') {
         // Remove trailing empty lines.
         lines = lines.slice(0, -1);
     }

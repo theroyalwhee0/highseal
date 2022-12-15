@@ -1,4 +1,4 @@
-import { Arguments } from "yargs";
+import { Arguments } from 'yargs';
 
 /**
  * A function for use with yargs.check.

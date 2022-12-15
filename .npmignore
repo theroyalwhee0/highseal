@@ -2,3 +2,4 @@ cli/
 .github/
 .env
 .npmrc
+Trotfile.toml

@@ -39,7 +39,7 @@ export async function readDotenv(): Promise<[Error | undefined, DotenvDocument]>
             lines: [],
             mapping: {},
         };
-        return [err, document]
+        return [err, document];
     }
 }
 
@@ -62,7 +62,7 @@ export async function writeDotenv(document: DotenvDocument): Promise<void> {
  */
 export function parseDotenv(content: string): [Error | undefined, DotenvDocument] {
     let lines = content === '' ? [] : content.split('\n');
-    if (lines.at(-1) === "") {
+    if (lines.at(-1) === '') {
         // Remove trailing empty lines.
         lines = lines.slice(0, -1);
     }
