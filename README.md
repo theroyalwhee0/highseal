@@ -7,6 +7,11 @@ A library to seal and unseal a string value with a secret. The value is encrypte
 ## Installation
 `npm install @theroyalwhee0/highseal`  
 
+## CLI
+The [Highseal CLI](https://www.npmjs.com/package/@theroyalwhee0/highseal-cli) install allows sealing and unsealing of values without writing code. 
+
+`npm install --global @theroyalwhee0/highseal-cli`
+
 
 ## Testing.
 Running ```npm run test``` will run the test suite. Running ```npm run test-watch``` will run the test suite in watch mode.
@@ -16,6 +21,7 @@ Running ```npm run test``` will run the test suite. Running ```npm run test-watc
 - GitHub: [https://github.com/theroyalwhee0/highseal](https://github.com/theroyalwhee0/highseal)
 - NPM: [https://www.npmjs.com/package/@theroyalwhee0/highseal](https://www.npmjs.com/package/@theroyalwhee0/highseal)
 - Changelog: [https://github.com/theroyalwhee0/highseal/blob/main/changelog.md](https://github.com/theroyalwhee0/highseal/blob/main/changelog.md)
+- Highseal CLI: [https://github.com/theroyalwhee0/highseal/tree/main/cli](https://github.com/theroyalwhee0/highseal/tree/main/cli)
 
 
 ## Legal & License

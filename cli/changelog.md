@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
-### Added 
+
+
+## [0.0.1] - 2022-12-15
+### Added
 - Secret From
     - Environment Variable
     - Terminal
@@ -23,5 +26,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Terminal
     - File
     - Dotenv File
-- Working CLI.
+- Working CLI supporting both seal and unseal.
 - Initial release.

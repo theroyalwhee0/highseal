@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import {
     DotenvDocument, parseDotenv, readDotenv,
-    serializeDotenv, setDotenvValue, writeDotenv
+    serializeDotenv, setDotenvValue, writeDotenv,
 } from '../src/dotenv';
 
 describe('dotenv', () => {
@@ -37,7 +37,7 @@ describe('dotenv', () => {
                     '# Marabou Stork',
                     'height=152',
                     'weight=9',
-                    'wingspan="3.7 m"'
+                    'wingspan="3.7 m"',
                 ],
                 mapping: {
                     'height': 1,
@@ -66,7 +66,7 @@ describe('dotenv', () => {
                     '# Marabou Stork',
                     'height=152',
                     'weight=9',
-                    'wingspan="3.7 m"'
+                    'wingspan="3.7 m"',
                 ],
                 mapping: {
                     'height': 1,
@@ -94,7 +94,7 @@ describe('dotenv', () => {
                     '# Marabou Stork',
                     'height=152',
                     'weight=9',
-                    'wingspan="3.7 m"'
+                    'wingspan="3.7 m"',
                 ],
                 mapping: {
                     'height': 1,
@@ -102,14 +102,14 @@ describe('dotenv', () => {
                     'wingspan': 3,
                 },
             };
-            setDotenvValue(document, 'species', 'L. crumenifer')
+            setDotenvValue(document, 'species', 'L. crumenifer');
             expect(document).to.eql({
                 lines: [
                     '# Marabou Stork',
                     'height=152',
                     'weight=9',
                     'wingspan="3.7 m"',
-                    'species=L. crumenifer'
+                    'species=L. crumenifer',
                 ],
                 mapping: {
                     'height': 1,
@@ -117,7 +117,7 @@ describe('dotenv', () => {
                     'wingspan': 3,
                     'species': 4,
                 },
-            })
+            });
         });
         it('should overwrite an existing key in the document', () => {
             const document: DotenvDocument = {
@@ -135,7 +135,7 @@ describe('dotenv', () => {
                     'wingspan': 4,
                 },
             };
-            setDotenvValue(document, 'species', 'L. crumenifer')
+            setDotenvValue(document, 'species', 'L. crumenifer');
             expect(document).to.eql({
                 lines: [
                     '# Marabou Stork',
@@ -150,7 +150,7 @@ describe('dotenv', () => {
                     'weight': 3,
                     'wingspan': 4,
                 },
-            })
+            });
         });
     });
     describe('readDotenv', () => {

@@ -16,6 +16,6 @@ describe('error', () => {
             expect(HighSealError.isHighSealError(null)).to.be.false;
             expect(HighSealError.isHighSealError(genericErr)).to.be.false;
             expect(HighSealError.isHighSealError(highSealErr)).to.be.true;
-        })
+        });
     });
 });

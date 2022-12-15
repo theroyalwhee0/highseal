@@ -72,7 +72,7 @@ async function main() {
                 }
                 const [unsealErr, unsealed] = (0, highseal_1.unseal)(sealed, secret);
                 if (unsealErr || unsealed === undefined) {
-                    throw new error_1.HighSealError(`Unable to unseal the given value.`);
+                    throw new error_1.HighSealError('Unable to unseal the given value.');
                 }
                 const [outputErr] = await (0, output_1.writeOutput)(argv, unsealed);
                 if (outputErr) {

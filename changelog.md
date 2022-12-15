@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [0.0.2] - 2022-12-15
+### Changed 
+- Updated readme to link to Highseal CLI.
+
 ## [0.0.1] - 2022-12-13
 ### Added 
 - Working seal and unseal.
