@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { connected } from 'node:process';
 import { ArgvShape } from './argv';
 import { HighSealError } from './error';
 import { readInput } from './utilities/input';
@@ -25,7 +26,7 @@ export async function getSecret(argv: ArgvShape): Promise<[Error | undefined, st
     switch (secretSource) {
         case 'env': {
             const secretEnvName = argv.secretEnv ?? 'HISE_SECRET';
-            console.info(`> Pulling secret from environment variable "${secretEnvName}"`);
+            console.info(`> Reading secret from environment variable "${secretEnvName}"`);
             const secretEnv = process.env[secretEnvName];
             if (secretEnv === undefined) {
                 err = new HighSealError(`Environment variable "${secretEnvName}" is undefined`);
@@ -35,7 +36,7 @@ export async function getSecret(argv: ArgvShape): Promise<[Error | undefined, st
             break;
         }
         case 'value': {
-            console.info('> Pulling secret from command line value');
+            console.info('> Reading secret from command line value');
             const secretValue = argv.secretValue;
             if (secretValue === undefined) {
                 err = new HighSealError('Expected secret value to be specified');
@@ -45,7 +46,7 @@ export async function getSecret(argv: ArgvShape): Promise<[Error | undefined, st
             break;
         }
         case 'file': {
-            console.log('> Pulling secret from file');
+            console.log('> Reading secret from file');
             if (argv.secretFile === undefined) {
                 err = new HighSealError('Expected secret file to be specified');
             } else {

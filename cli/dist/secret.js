@@ -28,7 +28,7 @@ async function getSecret(argv) {
     switch (secretSource) {
         case 'env': {
             const secretEnvName = argv.secretEnv ?? 'HISE_SECRET';
-            console.info(`> Pulling secret from environment variable "${secretEnvName}"`);
+            console.info(`> Reading secret from environment variable "${secretEnvName}"`);
             const secretEnv = process.env[secretEnvName];
             if (secretEnv === undefined) {
                 err = new error_1.HighSealError(`Environment variable "${secretEnvName}" is undefined`);
@@ -39,7 +39,7 @@ async function getSecret(argv) {
             break;
         }
         case 'value': {
-            console.info('> Pulling secret from command line value');
+            console.info('> Reading secret from command line value');
             const secretValue = argv.secretValue;
             if (secretValue === undefined) {
                 err = new error_1.HighSealError('Expected secret value to be specified');
@@ -50,7 +50,7 @@ async function getSecret(argv) {
             break;
         }
         case 'file': {
-            console.log('> Pulling secret from file');
+            console.log('> Reading secret from file');
             if (argv.secretFile === undefined) {
                 err = new error_1.HighSealError('Expected secret file to be specified');
             }

@@ -46,7 +46,14 @@ export async function main() {
                 if (err) {
                     throw err;
                 }
-                const _unsealed = unseal(sealed, secret);
+                const [unsealErr, unsealed] = unseal(sealed, secret);
+                if (unsealErr || unsealed === undefined) {
+                    throw new HighSealError(`Unable to unseal the given value.`);
+                }
+                const [outputErr] = await writeOutput(argv, unsealed);
+                if (outputErr) {
+                    throw outputErr;
+                }
                 break;
             }
         }

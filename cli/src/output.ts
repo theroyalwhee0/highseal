@@ -24,55 +24,59 @@ export function getOutputTarget(argv: ArgvShape): OutputTarget {
     throw new Error('Expected valid output target to be supplied.');
 }
 
-export async function writeOutput(argv: ArgvShape, sealed: string): Promise<[Error | undefined]> {
+export async function writeOutput(argv: ArgvShape, value: string | undefined): Promise<[Error | undefined]> {
     let err: Error | undefined;
     const { overwrite } = argv;
-    const outputTarget = getOutputTarget(argv);
-    switch (outputTarget) {
-        case 'terminal': {
-            console.info('> Writing output to terminal');
-            console.info('> Sealed Value:', sealed);
-            break;
-        }
-        case 'file': {
-            console.info('> Writing output to file');
-            if (argv.outputFile === undefined) {
-                err = new HighSealError('Expected output file to be specified');
-            } else {
-                try {
-                    await fs.writeFile(argv.outputFile, sealed, 'utf8');
-                } catch {
-                    err = new HighSealError(`An error occurred writing file "${argv.outputFile}"`);
-                }
+    if (value === undefined) {
+        err = new HighSealError('Expected output value to be a string');
+    } else {
+        const outputTarget = getOutputTarget(argv);
+        switch (outputTarget) {
+            case 'terminal': {
+                console.info('> Writing output to terminal');
+                console.info('> Value:', value);
+                break;
             }
-            break;
-        }
-        case 'dotenv': {
-            console.info('> Writing output to dotenv file');
-            const key = argv.outputDotenv;
-            if (key === undefined) {
-                err = new HighSealError('Expected dotenv file key to be specified');
-            } else {
-                const [_err, config] = await readDotenv();
-                if (key in config.mapping) {
-                    if (overwrite) {
-                        console.warn(`> Overwriting key "${key}" in dotfile`);
-                    } else {
-                        err = new HighSealError(`Key "${key}" already defined in dotfile`);
-                        break;
+            case 'file': {
+                console.info('> Writing output to file');
+                if (argv.outputFile === undefined) {
+                    err = new HighSealError('Expected output file to be specified');
+                } else {
+                    try {
+                        await fs.writeFile(argv.outputFile, value, 'utf8');
+                    } catch {
+                        err = new HighSealError(`An error occurred writing file "${argv.outputFile}"`);
                     }
                 }
-                setDotenvValue(config, key, sealed);
-                try {
-                    await writeDotenv(config);
-                } catch {
-                    err = new HighSealError('An error occurred writing dotenv file');
-                }
+                break;
             }
-            break;
-        }
-        default: {
-            throw new Error(`Unrecognized output target "${outputTarget}"`);
+            case 'dotenv': {
+                console.info('> Writing output to dotenv file');
+                const key = argv.outputDotenv;
+                if (key === undefined) {
+                    err = new HighSealError('Expected dotenv file key to be specified');
+                } else {
+                    const [_err, config] = await readDotenv();
+                    if (key in config.mapping) {
+                        if (overwrite) {
+                            console.warn(`> Overwriting key "${key}" in dotfile`);
+                        } else {
+                            err = new HighSealError(`Key "${key}" already defined in dotfile`);
+                            break;
+                        }
+                    }
+                    setDotenvValue(config, key, value);
+                    try {
+                        await writeDotenv(config);
+                    } catch {
+                        err = new HighSealError('An error occurred writing dotenv file');
+                    }
+                }
+                break;
+            }
+            default: {
+                throw new Error(`Unrecognized output target "${outputTarget}"`);
+            }
         }
     }
     return [err];
