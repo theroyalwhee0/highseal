@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { seal } from '../src/seal';
 import { cipherAlgorithm, hmacAlgorithm, ivSize, version } from '../src/constants';
+import sinon from 'sinon';
 
 describe('seal', () => {
     describe('seal', () => {
@@ -96,6 +97,70 @@ describe('seal', () => {
                 expect(sealedBuffer.length).to.be.greaterThan(idx);
                 expect(sealedBuffer.length % 8).to.equal(0);
             }
+        });
+    });
+    describe('should handle times within the given epoch', () => {
+        describe('from the start', () => {
+            let clock: sinon.SinonFakeTimers;
+            beforeEach(() => {
+                clock = sinon.useFakeTimers(1_577_854_800_000);
+            });
+            afterEach(() => {
+                clock.restore();
+            });
+            it('of the epoch', () => {
+                const secret = 'frequent scavenger';
+                const value = 'large and powerful bird';
+                const sealed = seal(value, secret);
+                expect(sealed).to.be.a('string');
+            });
+        });
+        describe('to the end', () => {
+            let clock: sinon.SinonFakeTimers;
+            beforeEach(() => {
+                clock = sinon.useFakeTimers(1_577_854_800_000 + 281_474_976_710_655);
+            });
+            afterEach(() => {
+                clock.restore();
+            });
+            it('of the epoch', () => {
+                const secret = 'frequent scavenger';
+                const value = 'large and powerful bird';
+                const sealed = seal(value, secret);
+                expect(sealed).to.be.a('string');
+            });
+        });
+        describe('before start of epoch', () => {
+            let clock: sinon.SinonFakeTimers;
+            beforeEach(() => {
+                clock = sinon.useFakeTimers(1_577_854_800_000 - 1);
+            });
+            afterEach(() => {
+                clock.restore();
+            });
+            it('should throw', () => {
+                const secret = 'frequent scavenger';
+                const value = 'large and powerful bird';
+                expect(() => {
+                    seal(value, secret);
+                }).to.throw(/Timestamp before minimum/i);
+            });
+        });
+        describe('after end of epoch', () => {
+            let clock: sinon.SinonFakeTimers;
+            beforeEach(() => {
+                clock = sinon.useFakeTimers(1_577_854_800_000 + 281_474_976_710_655 + 1);
+            });
+            afterEach(() => {
+                clock.restore();
+            });
+            it('should throw', () => {
+                const secret = 'frequent scavenger';
+                const value = 'large and powerful bird';
+                expect(() => {
+                    seal(value, secret);
+                }).to.throw(/Timestamp beyond maximum/i);
+            });
         });
     });
 });
