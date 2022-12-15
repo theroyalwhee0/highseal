@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import crypto from 'node:crypto';
 import { ArgvShape } from './argv';
 import { HighSealError } from './error';
-import { readInput } from './helpers';
+import { readInput } from './utilities/input';
 import { defaultGenerateLength } from './constants';
 
 export type InputSource = 'env' | 'file' | 'terminal' | 'value' | 'generate'

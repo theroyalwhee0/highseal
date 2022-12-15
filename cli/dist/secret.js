@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSecret = exports.getSecretSource = exports.re_valid_secret = void 0;
 const promises_1 = __importDefault(require("node:fs/promises"));
 const error_1 = require("./error");
-const helpers_1 = require("./helpers");
+const input_1 = require("./utilities/input");
 exports.re_valid_secret = /^.{10,}$/m;
 function getSecretSource(argv) {
     if (argv.secretValue !== undefined) {
@@ -66,7 +66,7 @@ async function getSecret(argv) {
         }
         case 'terminal': {
             console.info('> Prompting for secret');
-            secret = await (0, helpers_1.readInput)('> Please enter the secret: ');
+            secret = await (0, input_1.readInput)('> Please enter the secret: ');
             break;
         }
         default: {
