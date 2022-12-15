@@ -132,7 +132,21 @@ function getArgv(value, exit = true) {
             describe: 'Specify that the input should be a generated secret.',
             type: 'number',
         })
-            .check((0, yargs_2.demandExclusiveOptions)('input-env', 'input-value', 'input-file', 'input-terminal', 'input-generate'));
+            .check((0, yargs_2.demandExclusiveOptions)('input-env', 'input-value', 'input-file', 'input-terminal', 'input-generate'))
+            // Output Target.
+            .option('output-terminal', {
+            describe: 'Specify that the results should be written to the terminal.',
+            type: 'boolean',
+        })
+            .option('output-file', {
+            describe: 'Specify that the input should be written to a file.',
+            type: 'string',
+        })
+            .option('output-dotenv', {
+            describe: 'Specify that the input should be written to a .env file.',
+            type: 'string',
+        })
+            .check((0, yargs_2.demandExclusiveOptions)('output-terminal', 'output-file', 'output-dotenv'));
     })
         .demandCommand()
         .help()

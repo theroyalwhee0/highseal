@@ -24,17 +24,17 @@ export function getOutputTarget(argv: ArgvShape): OutputTarget {
     throw new Error('Expected valid output target to be supplied.');
 }
 
-export async function writeOutput(argv: ArgvShape, sealed: string | undefined): Promise<[Error | undefined]> {
+export async function writeOutput(argv: ArgvShape, value: string | undefined): Promise<[Error | undefined]> {
     let err: Error | undefined;
     const { overwrite } = argv;
-    if (sealed === undefined) {
-        err = new HighSealError('Expected sealed value to be a string');
+    if (value === undefined) {
+        err = new HighSealError('Expected output value to be a string');
     } else {
         const outputTarget = getOutputTarget(argv);
         switch (outputTarget) {
             case 'terminal': {
                 console.info('> Writing output to terminal');
-                console.info('> Sealed Value:', sealed);
+                console.info('> Value:', value);
                 break;
             }
             case 'file': {
@@ -43,7 +43,7 @@ export async function writeOutput(argv: ArgvShape, sealed: string | undefined): 
                     err = new HighSealError('Expected output file to be specified');
                 } else {
                     try {
-                        await fs.writeFile(argv.outputFile, sealed, 'utf8');
+                        await fs.writeFile(argv.outputFile, value, 'utf8');
                     } catch {
                         err = new HighSealError(`An error occurred writing file "${argv.outputFile}"`);
                     }
@@ -65,7 +65,7 @@ export async function writeOutput(argv: ArgvShape, sealed: string | undefined): 
                             break;
                         }
                     }
-                    setDotenvValue(config, key, sealed);
+                    setDotenvValue(config, key, value);
                     try {
                         await writeDotenv(config);
                     } catch {
