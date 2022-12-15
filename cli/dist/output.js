@@ -7,6 +7,11 @@ exports.writeOutput = exports.getOutputTarget = void 0;
 const promises_1 = __importDefault(require("node:fs/promises"));
 const dotenv_1 = require("./dotenv");
 const error_1 = require("./error");
+/**
+ * Get the output target from argv.
+ * @param argv The argv to use.
+ * @returns The output target.
+ */
 function getOutputTarget(argv) {
     if (argv.outputTerminal !== undefined) {
         return 'terminal';

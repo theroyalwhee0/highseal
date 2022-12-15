@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import { ArgvShape } from './argv';
 import { HighSealError } from './error';
-import { readInput } from './helpers';
+import { readInput } from './utilities/input';
 
 export type SecretSource = 'env' | 'value' | 'file' | 'terminal';
 

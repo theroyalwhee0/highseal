@@ -1,25 +1,17 @@
-import readline from 'readline';
+import { Arguments } from "yargs";
 
-export function readInput(prompt: string) {
-    return new Promise<string>((resolve) => {
-        process.stdout.write(prompt);
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-        });
-        rl.on('line', (line) => {
-            resolve(line);
-        });
-        rl.once('close', () => {
-            resolve('');
-        });
-    });
-}
+/**
+ * A function for use with yargs.check.
+ */
+export type CheckFunction = (argv: Arguments) => boolean;
 
-
-export type ExclusiveOption = (argv: Record<string, unknown>) => boolean;
-
-export function exclusiveOptions(...options: string[]): ExclusiveOption {
+/**
+ * Build a function for use with yargs.check that enforces given options are
+ * mutually exclusive.
+ * @param options The options that are mutually exclusive.
+ * @returns A function for use with yargs.check.
+ */
+export function exclusiveOptions(...options: string[]): CheckFunction {
     return (argv: Record<string, unknown>): boolean => {
         const count = options.filter(option => option in argv).length;
         const lastOption = options.pop();
@@ -30,7 +22,13 @@ export function exclusiveOptions(...options: string[]): ExclusiveOption {
     };
 }
 
-export function demandExclusiveOptions(...options: string[]): ExclusiveOption {
+/**
+ * Build a function for use with yargs.check that enforces given options are
+ * mutually exclusive and that at least one of them is specified.
+ * @param options The options that are mutually exclusive.
+ * @returns A function for use with yargs.check.
+ */
+export function demandExclusiveOptions(...options: string[]): CheckFunction {
     return (argv: Record<string, unknown>): boolean => {
         const count = options.filter(option => option in argv).length;
         const lastOption = options.pop();
