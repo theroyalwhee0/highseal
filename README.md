@@ -1,7 +1,7 @@
 # HighSeal - @theroyalwhee0/highseal
 
 ## What is this?
-A library to seal and unseal a string value with a secret. The value is encrypted with aes-256-gcm, padded to a minimum of 32 bytes and padded to a multiple of 8 bytes beyond that. For example the sealed value A.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFq.o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM is an empty string encrypted with the key "marabou stork".
+A library to seal and unseal a string value with a secret. The value is encrypted with aes-256-gcm, padded to a minimum of 32 bytes and padded to a multiple of 8 bytes beyond that.
 
 
 ## Installation
