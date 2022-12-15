@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import { connected } from 'node:process';
 import { ArgvShape } from './argv';
 import { HighSealError } from './error';
-import { readInput } from './helpers';
+import { readInput } from './utilities/input';
 
 export type SecretSource = 'env' | 'value' | 'file' | 'terminal';
 

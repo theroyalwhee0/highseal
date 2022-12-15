@@ -7,7 +7,7 @@ exports.getInput = exports.getInputSource = void 0;
 const promises_1 = __importDefault(require("node:fs/promises"));
 const node_crypto_1 = __importDefault(require("node:crypto"));
 const error_1 = require("./error");
-const helpers_1 = require("./helpers");
+const input_1 = require("./utilities/input");
 const constants_1 = require("./constants");
 function getInputSource(argv) {
     if (argv.inputValue !== undefined) {
@@ -71,7 +71,7 @@ async function getInput(argv) {
         }
         case 'terminal': {
             console.info('> Prompting for input');
-            input = await (0, helpers_1.readInput)('> Please enter the input: ');
+            input = await (0, input_1.readInput)('> Please enter the input: ');
             break;
         }
         case 'generate': {

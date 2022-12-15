@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getArgv = void 0;
 const yargs_1 = __importDefault(require("yargs"));
 const helpers_1 = require("yargs/helpers");
-const helpers_2 = require("./helpers");
+const yargs_2 = require("./utilities/yargs");
 function getArgv(value, exit = true) {
     value = value ?? process.argv;
     return (0, yargs_1.default)((0, helpers_1.hideBin)(value))
@@ -42,7 +42,7 @@ function getArgv(value, exit = true) {
             describe: 'Specify that the secret should be read from the user terminal.',
             type: 'boolean',
         })
-            .check((0, helpers_2.exclusiveOptions)('secret-env', 'secret-value', 'secret-file', 'secret-prompt'))
+            .check((0, yargs_2.exclusiveOptions)('secret-env', 'secret-value', 'secret-file', 'secret-prompt'))
             // Input Source.
             .option('input-env', {
             describe: 'Specify the name of the environment variable to get the input from.',
@@ -64,7 +64,7 @@ function getArgv(value, exit = true) {
             describe: 'Specify that the input should be a generated secret.',
             type: 'number',
         })
-            .check((0, helpers_2.demandExclusiveOptions)('input-env', 'input-value', 'input-file', 'input-terminal', 'input-generate'))
+            .check((0, yargs_2.demandExclusiveOptions)('input-env', 'input-value', 'input-file', 'input-terminal', 'input-generate'))
             // Output Target.
             .option('output-terminal', {
             describe: 'Specify that the results should be written to the terminal.',
@@ -78,7 +78,7 @@ function getArgv(value, exit = true) {
             describe: 'Specify that the input should be written to a .env file.',
             type: 'string',
         })
-            .check((0, helpers_2.demandExclusiveOptions)('output-terminal', 'output-file', 'output-dotenv'));
+            .check((0, yargs_2.demandExclusiveOptions)('output-terminal', 'output-file', 'output-dotenv'));
     })
         .command('unseal [options]', 'Unseal a value', (yargs) => {
         return yargs
@@ -110,7 +110,7 @@ function getArgv(value, exit = true) {
             describe: 'Specify that the secret should be read from the user terminal.',
             type: 'boolean',
         })
-            .check((0, helpers_2.exclusiveOptions)('secret-env', 'secret-value', 'secret-file', 'secret-prompt'))
+            .check((0, yargs_2.exclusiveOptions)('secret-env', 'secret-value', 'secret-file', 'secret-prompt'))
             // Input Source.
             .option('input-env', {
             describe: 'Specify the name of the environment variable to get the input from.',
@@ -132,7 +132,7 @@ function getArgv(value, exit = true) {
             describe: 'Specify that the input should be a generated secret.',
             type: 'number',
         })
-            .check((0, helpers_2.demandExclusiveOptions)('input-env', 'input-value', 'input-file', 'input-terminal', 'input-generate'));
+            .check((0, yargs_2.demandExclusiveOptions)('input-env', 'input-value', 'input-file', 'input-terminal', 'input-generate'));
     })
         .demandCommand()
         .help()

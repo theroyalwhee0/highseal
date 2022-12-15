@@ -3,8 +3,16 @@ import { readDotenv, setDotenvValue, writeDotenv } from './dotenv';
 import { ArgvShape } from './argv';
 import { HighSealError } from './error';
 
+/**
+ * Types of output targets.
+ */
 export type OutputTarget = 'terminal' | 'file' | 'dotenv';
 
+/**
+ * Get the output target from argv.
+ * @param argv The argv to use.
+ * @returns The output target.
+ */
 export function getOutputTarget(argv: ArgvShape): OutputTarget {
     if (argv.outputTerminal !== undefined) {
         return 'terminal';
