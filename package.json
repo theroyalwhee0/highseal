@@ -34,5 +34,8 @@
     "test-watch": "mocha --reporter dot --watch --watch-files test/**/*.test.ts --watch-files src/**/*.ts --require ts-node/register test/**/*.test.ts",
     "dryrun": "npm prune && npm audit && npm run rebuild && npm run lint && npm test && npm publish --dry-run",
     "audit": "npm audit --omit dev"
+  },
+  "dependencies": {
+    "@theroyalwhee0/counters": "1.0.0"
   }
 }

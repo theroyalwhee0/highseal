@@ -1,9 +1,27 @@
 import { randomBytes } from 'node:crypto';
-import {
-    ivEpochStart, ivMaxCounter, ivMaxEpochTimestamp, ivRandomSize,
-} from './constants';
+import { uint16Counter } from '@theroyalwhee0/counters';
+import { ivEpochStart, ivMaxEpochTimestamp, ivRandomSize } from './constants';
 
-let ivCounter = randomBytes(4).readUInt16BE();
+/**
+ * The counter.
+ */
+const ivCounter = uint16Counter({
+    initial: randomUint16GTZ(),
+});
+
+/**
+ * Get a random UINT16 greater than zero.
+ * @returns An integer between 1 and 65535.
+ */
+function randomUint16GTZ() {
+    return Math.max(1, randomBytes(4).readUInt16BE());
+}
+
+/**
+ * Create an IV.
+ * From a epoch timestamp, a counter, and random bytes.
+ * @returns IV Buffer.
+ */
 export function createIv(): Buffer {
     // Timestamp, 6 bytes
     const timestamp = Date.now() - ivEpochStart;
@@ -15,17 +33,16 @@ export function createIv(): Buffer {
     const timestampBigBuffer = Buffer.alloc(8);
     timestampBigBuffer.writeBigInt64BE(BigInt(timestamp));
     const timestampBuffer = timestampBigBuffer.subarray(2);
-    // Counter, 4 bytes
-    if (ivCounter >= ivMaxCounter) {
-        ivCounter = 0;
-    } else {
-        ivCounter += 1;
-    }
+    // Counter, 2 bytes.
+    const { value } = ivCounter.next();
     const counterBuffer = Buffer.alloc(2);
-    counterBuffer.writeUInt16BE(ivCounter);
+    counterBuffer.writeUInt16BE(value);
+    // Random, 4 bytes.
+    const randomBuffer = randomBytes(ivRandomSize);
+    // Concat buffers.
     return Buffer.concat([
         timestampBuffer,
         counterBuffer,
-        randomBytes(ivRandomSize),
+        randomBuffer,
     ]);
 }
