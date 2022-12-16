@@ -2,7 +2,7 @@ import crypto from 'node:crypto';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { seal } from '../src/seal';
-import { cipherAlgorithm, hmacAlgorithm, ivSize, version } from '../src/constants';
+import { cipherAlgorithm, keyAHmacAlgorithm, ivSize, version } from '../src/constants';
 import sinon from 'sinon';
 
 describe('seal', () => {
@@ -65,7 +65,7 @@ describe('seal', () => {
             expect(sealedBuffer.length % 8).to.equal(0);
             expect(ivBuffer.length).to.equal(ivSize);
             // Manually decrypt and check paddding.
-            const hmac = crypto.createHmac(hmacAlgorithm, secret);
+            const hmac = crypto.createHmac(keyAHmacAlgorithm, secret);
             const keyBuffer = hmac.digest();
             const decipher = crypto.createDecipheriv(cipherAlgorithm, keyBuffer, ivBuffer);
             decipher.setAuthTag(authTagBuffer);

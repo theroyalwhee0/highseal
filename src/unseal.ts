@@ -1,6 +1,6 @@
 import { createDecipheriv, createHmac } from 'node:crypto';
 import {
-    authTagSize, cipherAlgorithm, hmacAlgorithm, ivSize,
+    authTagSize, cipherAlgorithm, keyAHmacAlgorithm, ivSize,
     padMinLength, re_valid_sealed, separator, version,
 } from './constants';
 
@@ -27,7 +27,7 @@ export function unseal(sealed: string, secret: string): [boolean, string | undef
         return [true, ''];
     }
     const valueBuffer = Buffer.from(valueEncoded, 'base64');
-    const hmac = createHmac(hmacAlgorithm, secret);
+    const hmac = createHmac(keyAHmacAlgorithm, secret);
     const keyBuffer = hmac.digest();
     const decipher = createDecipheriv(cipherAlgorithm, keyBuffer, ivBuffer);
     decipher.setAuthTag(authTagBuffer);

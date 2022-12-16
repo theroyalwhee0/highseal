@@ -1,7 +1,9 @@
 // Key.
 export const minSecretLength = 10; // In characters.
-export const hmacAlgorithm = 'sha3-256';
 export const keySize = 32; // in bytes
+
+// Key type A.
+export const keyAHmacAlgorithm = 'sha3-256';
 
 // Cipher.
 export const cipherAlgorithm = 'aes-256-gcm';

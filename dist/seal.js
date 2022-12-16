@@ -5,6 +5,14 @@ const node_crypto_1 = require("node:crypto");
 const constants_1 = require("./constants");
 const iv_1 = require("./iv");
 const pad_1 = require("./pad");
+/**
+ * Seal a string with a secret.
+ * The value will be padded to a minimum length, a multiple length, and
+ * encrypted with authenticate encryption.
+ * @param value The string to seal.
+ * @param secret The secret to encrypt with. Must be at least 10 characters.
+ * @returns The sealed string.
+ */
 function seal(value, secret) {
     if (!(secret && secret.length >= constants_1.minSecretLength)) {
         throw new Error(`Secret is required and must be at least ${constants_1.minSecretLength} characters`);

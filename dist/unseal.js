@@ -3,12 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.unseal = void 0;
 const node_crypto_1 = require("node:crypto");
 const constants_1 = require("./constants");
-const re_valid_encrypted = /^A\.[a-zA-Z0-9/+]+\.[a-zA-Z0-9/+]+\.[a-zA-Z0-9/+]+$/;
-function unseal(encrypted, key) {
-    if (!re_valid_encrypted.test(encrypted)) {
+/**
+ * Unseal a sealed value.
+ * @param sealed The sealed value.
+ * @param secret The secret to decrypt with.
+ * @returns A tuple of an error boolean and the unsealed value.
+ */
+function unseal(sealed, secret) {
+    if (!constants_1.re_valid_sealed.test(sealed)) {
         return [true, ''];
     }
-    const [versionIdent, authTagEncoded, ivEncoded, valueEncoded] = encrypted.split(constants_1.separator);
+    const [versionIdent, authTagEncoded, ivEncoded, valueEncoded] = sealed.split(constants_1.separator);
     if (versionIdent !== constants_1.version) {
         return [true, ''];
     }
@@ -19,7 +24,7 @@ function unseal(encrypted, key) {
         return [true, ''];
     }
     const valueBuffer = Buffer.from(valueEncoded, 'base64');
-    const hmac = (0, node_crypto_1.createHmac)(constants_1.hmacAlgorithm, key);
+    const hmac = (0, node_crypto_1.createHmac)(constants_1.hmacAlgorithm, secret);
     const keyBuffer = hmac.digest();
     const decipher = (0, node_crypto_1.createDecipheriv)(constants_1.cipherAlgorithm, keyBuffer, ivBuffer);
     decipher.setAuthTag(authTagBuffer);
