@@ -1,21 +1,20 @@
 import { createDecipheriv, createHmac } from 'node:crypto';
 import {
-    authTagSize,
-    cipherAlgorithm,
-    hmacAlgorithm,
-    ivSize,
-    padMinLength,
-    separator,
-    version,
+    authTagSize, cipherAlgorithm, hmacAlgorithm, ivSize,
+    padMinLength, re_valid_sealed, separator, version,
 } from './constants';
 
-const re_valid_encrypted = /^A\.[a-zA-Z0-9/+]+\.[a-zA-Z0-9/+]+\.[a-zA-Z0-9/+]+$/;
-
-export function unseal(encrypted: string, key: string): [boolean, string | undefined] {
-    if (!re_valid_encrypted.test(encrypted)) {
+/**
+ * Unseal a sealed value.
+ * @param sealed The sealed value.
+ * @param secret The secret to decrypt with.
+ * @returns A tuple of an error boolean and the unsealed value.
+ */
+export function unseal(sealed: string, secret: string): [boolean, string | undefined] {
+    if (!re_valid_sealed.test(sealed)) {
         return [true, ''];
     }
-    const [versionIdent, authTagEncoded, ivEncoded, valueEncoded] = encrypted.split(separator);
+    const [versionIdent, authTagEncoded, ivEncoded, valueEncoded] = sealed.split(separator);
     if (versionIdent !== version) {
         return [true, ''];
     }
@@ -28,7 +27,7 @@ export function unseal(encrypted: string, key: string): [boolean, string | undef
         return [true, ''];
     }
     const valueBuffer = Buffer.from(valueEncoded, 'base64');
-    const hmac = createHmac(hmacAlgorithm, key);
+    const hmac = createHmac(hmacAlgorithm, secret);
     const keyBuffer = hmac.digest();
     const decipher = createDecipheriv(cipherAlgorithm, keyBuffer, ivBuffer);
     decipher.setAuthTag(authTagBuffer);

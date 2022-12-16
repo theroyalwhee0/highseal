@@ -1,8 +1,16 @@
 import { createCipheriv, createHmac } from 'node:crypto';
-import { version, cipherAlgorithm, hmacAlgorithm, minSecretLength, separator } from './constants';
+import { cipherAlgorithm, hmacAlgorithm, minSecretLength, separator, version } from './constants';
 import { createIv } from './iv';
 import { padValue } from './pad';
 
+/**
+ * Seal a string with a secret.
+ * The value will be padded to a minimum length, a multiple length, and 
+ * encrypted with authenticate encryption.
+ * @param value The string to seal.
+ * @param secret The secret to encrypt with. Must be at least 10 characters.
+ * @returns The sealed string.
+ */
 export function seal(value: string, secret: string): string {
     if (!(secret && secret.length >= minSecretLength)) {
         throw new Error(`Secret is required and must be at least ${minSecretLength} characters`);
@@ -24,4 +32,3 @@ export function seal(value: string, secret: string): string {
     ].join(separator);
     return results;
 }
-
