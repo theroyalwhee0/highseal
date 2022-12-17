@@ -1,9 +1,14 @@
-import crypto from 'node:crypto';
+import crypto, { pbkdf2Sync } from 'node:crypto';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { seal } from '../src/seal';
-import { cipherAlgorithm, hmacAlgorithm, ivSize, version } from '../src/constants';
+import { cipherAlgorithm, hmacAlgorithm, ivSize, keyIterations, keySalt, keySize, version } from '../src/constants';
 import sinon from 'sinon';
+
+/**
+ * Valid sealed format for Version-B.
+ */
+const re_valid_sealed_b = /^B\.[a-zA-Z0-9/+]{21,22}\.[a-zA-Z0-9/+]{16}\.[a-zA-Z0-9/+]{42,}$/;
 
 describe('seal', () => {
     describe('seal', () => {
@@ -15,7 +20,7 @@ describe('seal', () => {
             const value = '';
             const result = seal(value, secret);
             expect(result).to.be.a('string');
-            expect(result).to.match(/^[a-zA-Z0-9/+.]+$/);
+            expect(result).to.match(re_valid_sealed_b);
             const split = result.split('.');
             expect(split.length).to.equal(4);
             const [ver, _authTag, _iv, encrypted] = split;
@@ -28,7 +33,7 @@ describe('seal', () => {
             const value = 'A';
             const result = seal(value, secret);
             expect(result).to.be.a('string');
-            expect(result).to.match(/^[a-zA-Z0-9/+.]+$/);
+            expect(result).to.match(re_valid_sealed_b);
             const split = result.split('.');
             expect(split.length).to.equal(4);
             const [ver, _authTag, _iv, encrypted] = split;
@@ -41,7 +46,7 @@ describe('seal', () => {
             const value = 'stork family';
             const result = seal(value, secret);
             expect(result).to.be.a('string');
-            expect(result).to.match(/^[a-zA-Z0-9/+.]+$/);
+            expect(result).to.match(re_valid_sealed_b);
             const split = result.split('.');
             expect(split.length).to.equal(4);
             const [ver, _authTag, _iv, encrypted] = split;
@@ -54,7 +59,7 @@ describe('seal', () => {
             const value = 'The marabou stork is a large wading bird in the stork family';
             const result = seal(value, secret);
             expect(result).to.be.a('string');
-            expect(result).to.match(/^[a-zA-Z0-9/+.]+$/);
+            expect(result).to.match(re_valid_sealed_b);
             const split = result.split('.');
             expect(split.length).to.equal(4);
             const [ver, authTag, iv, encrypted] = split;
@@ -64,9 +69,9 @@ describe('seal', () => {
             const sealedBuffer = Buffer.from(encrypted, 'base64');
             expect(sealedBuffer.length % 8).to.equal(0);
             expect(ivBuffer.length).to.equal(ivSize);
+            // Manuall create key buffer.
+            const keyBuffer = pbkdf2Sync(secret, keySalt, keyIterations, keySize, hmacAlgorithm);
             // Manually decrypt and check paddding.
-            const hmac = crypto.createHmac(hmacAlgorithm, secret);
-            const keyBuffer = hmac.digest();
             const decipher = crypto.createDecipheriv(cipherAlgorithm, keyBuffer, ivBuffer);
             decipher.setAuthTag(authTagBuffer);
             const decryptBuffer = Buffer.concat([
@@ -88,7 +93,7 @@ describe('seal', () => {
                 const value = '.'.repeat(idx);
                 const result = seal(value, secret);
                 expect(result).to.be.a('string');
-                expect(result).to.match(/^[a-zA-Z0-9/+.]+$/);
+                expect(result).to.match(re_valid_sealed_b);
                 const split = result.split('.');
                 expect(split.length).to.equal(4);
                 const [ver, _authTag, _iv, encrypted] = split;

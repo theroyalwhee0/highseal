@@ -72,11 +72,12 @@ describe('iv', () => {
                 const counterBuffer = iv.subarray(ivTimestampSize, ivTimestampSize + ivCounterSize);
                 expect(counterBuffer.length).to.equal(ivCounterSize);
                 const counter = counterBuffer.readUInt16BE();
-                expect(counter >= 0).to.be.true;
+                expect(counter >= 1).to.be.true;
                 expect(counter <= 65535).to.be.true; // 2^16-1
                 if (lastCounter !== -1) {
                     if (lastCounter >= ivMaxCounter) {
-                        expect(counter).to.equal(0);
+                        // NOTE: Counter zero is skipped by @theroyalwhee0/counters.
+                        expect(counter).to.equal(1);
                     } else {
                         expect(counter).to.be.greaterThan(lastCounter);
                     }

@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved comments.
 - Added example code to readme.
 - Added security note.
+- Improve tests.
+- Added improved key derivation and made it the default.
 
 
 ## [0.0.3] - 2022-12-15

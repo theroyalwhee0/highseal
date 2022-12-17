@@ -1,8 +1,9 @@
-import { createDecipheriv, createHmac } from 'node:crypto';
+import { createDecipheriv } from 'node:crypto';
 import {
-    authTagSize, cipherAlgorithm, hmacAlgorithm, ivSize,
-    padMinLength, re_valid_sealed, separator, version,
+    authTagSize, cipherAlgorithm, ivSize,
+    padMinLength, re_valid_sealed, separator,
 } from './constants';
+import { deriveKeyA, deriveKeyB } from './key';
 
 /**
  * Unseal a sealed value.
@@ -10,25 +11,33 @@ import {
  * @param secret The secret to decrypt with.
  * @returns A tuple of an error boolean and the unsealed value.
  */
-export function unseal(sealed: string, secret: string): [boolean, string | undefined] {
+export function unseal(sealed: string, secret: string): [Error | undefined, string | undefined] {
     if (!re_valid_sealed.test(sealed)) {
-        return [true, ''];
+        return [new Error('Invalid formatting'), ''];
     }
     const [versionIdent, authTagEncoded, ivEncoded, valueEncoded] = sealed.split(separator);
-    if (versionIdent !== version) {
-        return [true, ''];
-    }
     const authTagBuffer = Buffer.from(authTagEncoded, 'base64');
     const ivBuffer = Buffer.from(ivEncoded, 'base64');
-    if (
-        ivBuffer.length !== ivSize ||
-        authTagBuffer.length !== authTagSize
-    ) {
-        return [true, ''];
+    if (ivBuffer.length !== ivSize) {
+        return [new Error('Invalid IV size'), ''];
+    } else if (authTagBuffer.length !== authTagSize) {
+        return [new Error('Invalid tag size'), ''];
     }
     const valueBuffer = Buffer.from(valueEncoded, 'base64');
-    const hmac = createHmac(hmacAlgorithm, secret);
-    const keyBuffer = hmac.digest();
+    let keyBuffer: Buffer;
+    switch (versionIdent) {
+        case 'A': {
+            keyBuffer = deriveKeyA(secret);
+            break;
+        }
+        case 'B': {
+            keyBuffer = deriveKeyB(secret);
+            break;
+        }
+        default: {
+            return [new Error('Unsupported version'), ''];
+        }
+    }
     const decipher = createDecipheriv(cipherAlgorithm, keyBuffer, ivBuffer);
     decipher.setAuthTag(authTagBuffer);
     let decryptBuffer: Buffer;
@@ -37,16 +46,16 @@ export function unseal(sealed: string, secret: string): [boolean, string | undef
             decipher.update(valueBuffer),
             decipher.final(),
         ]);
-    } catch {
+    } catch (err) {
         // Decipher will throw unspecialized Errors if unable to decrypt.
         // Could indicate invalid IV, authTag, password, content, etc.
-        return [true, ''];
+        return [err, ''];
     }
     const paddingByte = decryptBuffer.at(-1);
     if (paddingByte === undefined || paddingByte < 0 || paddingByte > padMinLength) {
-        return [true, ''];
+        return [new Error('Invalid padding bytes.'), ''];
     }
     const unpadded = decryptBuffer.subarray(0, -1 * paddingByte);
     const result = unpadded.toString();
-    return [false, result];
+    return [undefined, result];
 }

@@ -2,125 +2,148 @@ import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { unseal } from '../src/unseal';
 
+// NOTE: See unseal-deprecated.test.ts for deprecated seal versions.
+
 describe('unseal', () => {
     it('should be a function', () => {
         expect(unseal).to.be.a('function');
     });
     it('should unseal an empty value', () => {
         const secret = 'marabou stork';
-        const sealed = 'A.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFq.o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM';
+        const sealed = 'B.cOe0e/HEfA6Ao7j7rzjwgQ.ABXCBD5NYHr4lvlp.LtpCMzPk7yi2bPq/c0VPGBW3MgNGOF3zKEq2JQEZvH8';
         const result = unseal(sealed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(false);
+        expect(err).to.equal(undefined);
         expect(value).to.equal('');
     });
     it('should unseal a value smaller than minimum padding', () => {
         const secret = 'marabou stork';
-        const sealed = 'A.d6W3PyrUh6DdJ2GfKC0hAQ.ABWSoStmRYlIBaDb.MSjvAT3cyg/asL2/TAGWDzBIGG5dBg5F2K32OyifkiA';
+        const sealed = 'B.jqlL0Y4p93Ld1zw6++fGlg.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U';
         const result = unseal(sealed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(false);
+        expect(err).to.equal(undefined);
         expect(value).to.equal('stork family');
     });
     it('should unseal a value larger than minimum padding', () => {
         const secret = 'marabou stork';
-        const sealed = 'A.OnqEwy9m5g7xbr0/mfQ+Cg.ABWSofwLVz7YqNet.bg0aWzvIALhE13bBq3zJiqtXGdSugifSVXl9dz7wRksfUjfRTGWq6Y1IS3CELGCFcppvS5BG9yHRgjjdiksi1A';
+        const sealed = 'B.Y2j7r5vURzn2uaq5YBNvjA.ABXCBZ4H2i3wwqWK.bZsXchluxpJBQ4OlUrYKL1emvt05+MAroyGRctO50zOZuCgBh+uRX6VY8hP4KxB8Ud6MgBZTncSUmQnR9vDr4Q';
         const result = unseal(sealed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(false);
+        expect(err).to.equal(undefined);
         expect(value).to.equal('The marabou stork is a large wading bird in the stork family');
     });
     it('should fail to unseal given wrong password', () => {
         const wrongSecret = 'few natural enemies';
-        const sealed = 'A.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFq.o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM';
+        const sealed = 'B.jqlL0Y4p93Ld1zw6++fGlg.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U';
         const result = unseal(sealed, wrongSecret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(true);
+        expect(err).to.be.an.instanceOf(Error);
+        expect(err?.message).to.match(/Unsupported state or unable to authenticate/);
         expect(value).to.equal('');
     });
     it('should fail to unseal given corrupted AuthTag', () => {
         const secret = 'marabou stork';
-        const corruptedAuthTag = '++XhmSdywgfFt+Jta0uIa'; // Originally '9DXhmSdywgfFt+Jta0uIaQ'
-        const malformed = `A.${corruptedAuthTag}.ABWSkxaLf4oAwwFq.o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM`;
+        const originalAuthTag = 'jqlL0Y4p93Ld1zw6++fGlg';
+        const corruptedAuthTag = '++' + originalAuthTag.slice(2);
+        const malformed = `B.${corruptedAuthTag}.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U`;
+        expect(corruptedAuthTag.length).to.equal(originalAuthTag.length);
         const result = unseal(malformed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(true);
+        expect(err).to.be.an.instanceOf(Error);
+        expect(err?.message).to.match(/Unsupported state or unable to authenticate/);
         expect(value).to.equal('');
     });
     it('should fail to unseal given shortened AuthTag', () => {
         const secret = 'marabou stork';
-        const corruptedAuthTag = '9DXhmSdywg'; // Originally '9DXhmSdywgfFt+Jta0uIaQ'
-        const malformed = `A.${corruptedAuthTag}.ABWSkxaLf4oAwwFq.o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM`;
+        const originalAuthTag = 'jqlL0Y4p93Ld1zw6++fGlg';
+        const corruptedAuthTag = originalAuthTag.slice(0, 10);
+        const malformed = `B.${corruptedAuthTag}.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U`;
+        expect(corruptedAuthTag.length).to.lessThan(originalAuthTag.length);
         const result = unseal(malformed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(true);
+        expect(err).to.be.an.instanceOf(Error);
+        expect(err?.message).to.match(/Invalid formatting/);
         expect(value).to.equal('');
     });
     it('should fail to unseal given corrupted IV', () => {
         const secret = 'marabou stork';
-        const corruptedIV = '++WSkxaLf4oAwwFq'; // Originally 'ABWSkxaLf4oAwwFq'
-        const malformed = `A.9DXhmSdywgfFt+Jta0uIaQ.${corruptedIV}.o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM`;
+        const originalIV = 'ABXCBSZAIs1Di0+U';
+        const corruptedIV = '++' + originalIV.slice(2);
+        const malformed = `B.jqlL0Y4p93Ld1zw6++fGlg.${corruptedIV}.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U`;
+        expect(corruptedIV.length).to.equal(originalIV.length);
         const result = unseal(malformed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(true);
+        expect(err).to.be.an.instanceOf(Error);
+        expect(err?.message).to.match(/Unsupported state or unable to authenticate/);
         expect(value).to.equal('');
     });
     it('should fail to unseal given shortened IV', () => {
         const secret = 'marabou stork';
-        const corruptedIV = 'ABWSkxaL'; // Originally 'ABWSkxaLf4oAwwFq'
-        const malformed = `A.9DXhmSdywgfFt+Jta0uIaQ.${corruptedIV}.o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM`;
+        const originalIV = 'ABXCBSZAIs1Di0+U';
+        const corruptedIV = originalIV.slice(0, 10);
+        const malformed = `B.jqlL0Y4p93Ld1zw6++fGlg.${corruptedIV}.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U`;
+        expect(corruptedIV.length).to.lessThan(originalIV.length);
         const result = unseal(malformed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(true);
+        expect(err).to.be.an.instanceOf(Error);
+        expect(err?.message).to.match(/Invalid formatting/);
         expect(value).to.equal('');
     });
     it('should fail to unseal given corrupted Content', () => {
         const secret = 'marabou stork';
-        const corruptedContent = '++e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM'; // Originally 'o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM'
-        const malformed = `A.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFq.${corruptedContent}`;
+        const originalContent = 'kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U';
+        const corruptedContent = '++' + originalContent.slice(2);
+        const malformed = `B.jqlL0Y4p93Ld1zw6++fGlg.ABXCBSZAIs1Di0+U.${corruptedContent}`;
+        expect(corruptedContent.length).to.equal(originalContent.length);
         const result = unseal(malformed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(true);
+        expect(err).to.be.an.instanceOf(Error);
+        expect(err?.message).to.match(/Unsupported state or unable to authenticate/);
         expect(value).to.equal('');
     });
     it('should fail to unseal given malformed input', () => {
         const secret = 'marabou stork';
+        const original = 'B.jqlL0Y4p93Ld1zw6++fGlg.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U';
         // The thrid '.' was removed.
-        const malformed = 'A.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFqo2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM';
+        const malformed = original.replace(/\+U\.ky/, '+Uky');
+        expect(malformed.length + 1).to.equal(original.length);
         const result = unseal(malformed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(true);
+        expect(err).to.be.an.instanceOf(Error);
+        expect(err?.message).to.match(/Invalid formatting/);
         expect(value).to.equal('');
     });
     it('should fail to unseal given invalid version', () => {
         const secret = 'marabou stork';
-        // Version 'A' was replaced with '+'.
-        const malformed = '+.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFqo2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM';
+        const original = 'B.jqlL0Y4p93Ld1zw6++fGlg.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U';
+        // Version 'B' was replaced with '+'.
+        const malformed = original.replace(/^B/, '+');
         const result = unseal(malformed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
         const [err, value] = result;
-        expect(err).to.equal(true);
+        expect(err).to.be.an.instanceOf(Error);
+        expect(err?.message).to.match(/Invalid formatting/);
         expect(value).to.equal('');
     });
 });

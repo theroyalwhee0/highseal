@@ -13,8 +13,14 @@ describe('check', () => {
             // Values that should be seen as sealed...
             [
                 [
-                    'a sealed blank value',
+                    'a sealed blank value, version-A',
                     'A.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFq.o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM',
+                ], [
+                    'a sealed blank value, version-B',
+                    'B.cOe0e/HEfA6Ao7j7rzjwgQ.ABXCBD5NYHr4lvlp.LtpCMzPk7yi2bPq/c0VPGBW3MgNGOF3zKEq2JQEZvH8',
+                ], [
+                    'a sealed value, version-B',
+                    'B.dc7Hor7FUQKCtMggI+znoA.ABXCF2jgUWvdi5IS.CYExntjgW29eutzikL/fRSBzvfl0HEDQBDNfNiNsx0VMumota8GM9d6/bkv9yeo5jJDTMfMucgMpJIPSuKycwQ',
                 ], [
                     'a sealed string longer than minimum size',
                     'A.J3tfnvSR9RGH5ZN6yZ6yZw.ABW4LllE+FD4F3gm.QdoTcwbGrZeY1hsX1g/0cfPEuPMHPWiSZXBC3wptZH5zD1krQy/k4HBcn8vvQdTWrGjwEOVHGcY',
@@ -38,10 +44,18 @@ describe('check', () => {
                 [
                     'a blank value',
                     '',
-                ],
-                [
+                ], [
                     'a sealed value with an invalid version',
-                    'Z.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFq.o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM',
+                    '+.9DXhmSdywgfFt+Jta0uIaQ.ABWSkxaLf4oAwwFq.o2e5jDHA6t3M5+aBbt0ideAMyA0knhhsBviHndt27sM',
+                ], [
+                    'a sealed value with a shortened AuthTag',
+                    'B.e0e/HEfA6Ao7j7rzjwgQ.ABXCBD5NYHr4lvlp.LtpCMzPk7yi2bPq/c0VPGBW3MgNGOF3zKEq2JQEZvH8',
+                ], [
+                    'a sealed value with a shortened IV',
+                    'B.cOe0e/HEfA6Ao7j7rzjwgQ.XCBD5NYHr4lvlp.LtpCMzPk7yi2bPq/c0VPGBW3MgNGOF3zKEq2JQEZvH8',
+                ], [
+                    'a sealed value without separators',
+                    'BcOe0e/HEfA6Ao7j7rzjwgQABXCBD5NYHr4lvlpLtpCMzPk7yi2bPq/c0VPGBW3MgNGOF3zKEq2JQEZvH8',
                 ],
             ].forEach(([description, value]) => {
                 it(description, () => {

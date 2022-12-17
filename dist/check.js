@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isSealed = void 0;
+const constants_1 = require("./constants");
 /**
  * Is the value formatted as a sealed value.
  * @param value The value to check.
@@ -8,7 +9,7 @@ exports.isSealed = void 0;
  */
 function isSealed(value) {
     // NOTE: Lengths comes from floor(4*(n/3)) < ceil(4*(n/3)) since padding is stripped.
-    return /^A\.[a-zA-Z0-9/+]{21,22}\.[a-zA-Z0-9/+]{16}\.[a-zA-Z0-9/+]{42,}$/.test(value);
+    return constants_1.re_valid_sealed.test(value);
 }
 exports.isSealed = isSealed;
 //# sourceMappingURL=check.js.map

@@ -1,10 +1,7 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { padValue } from '../src/pad';
-
-function arrayOf(length: number) {
-    return Array(length).fill(length);
-}
+import { filledArrayOf } from './helpers';
 
 describe('pad', () => {
     describe('padValue', () => {
@@ -16,7 +13,7 @@ describe('pad', () => {
             expect(result).to.be.instanceOf(Buffer);
             expect(result.length).to.equal(32);
             expect(Array.from(result)).to.eql(
-                arrayOf(32),
+                filledArrayOf(32),
             );
         });
         it('should pad one byte value', () => {
@@ -25,7 +22,7 @@ describe('pad', () => {
             expect(result.length).to.equal(32);
             expect(Array.from(result)).to.eql([
                 65, // Content
-                ...arrayOf(31), // Padding
+                ...filledArrayOf(31), // Padding
             ]);
         });
         it('should pad seven byte value', () => {
@@ -34,7 +31,7 @@ describe('pad', () => {
             expect(result.length).to.equal(32);
             expect(Array.from(result)).to.eql([
                 82, 97, 98, 98, 105, 116, 115, // Content
-                ...arrayOf(25), // Padding
+                ...filledArrayOf(25), // Padding
             ]);
         });
         it('should pad eight byte value', () => {
@@ -43,7 +40,7 @@ describe('pad', () => {
             expect(result.length).to.equal(32);
             expect(Array.from(result)).to.eql([
                 70, 108, 97, 112, 106, 97, 99, 107, // Content
-                ...arrayOf(24), // Padding
+                ...filledArrayOf(24), // Padding
             ]);
         });
         it('should pad always values', () => {
