@@ -11,7 +11,7 @@ describe('seal and unseal', () => {
             expect(sealed).to.be.a('string');
             expect(isSealed(sealed)).to.be.true;
             const [err, unsealed] = unseal(sealed, secret);
-            expect(err).to.equal(false);
+            expect(err).to.equal(undefined);
             expect(unsealed).to.equal('');
         });
         it('should handle a range of strings', () => {
@@ -22,7 +22,7 @@ describe('seal and unseal', () => {
                 expect(isSealed(sealed)).to.be.true;
                 expect(sealed).to.be.a('string');
                 const [err, unsealed] = unseal(sealed, secret);
-                expect(err).to.equal(false);
+                expect(err).to.equal(undefined);
                 expect(unsealed).to.equal(value);
             }
         });

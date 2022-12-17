@@ -1,6 +1,8 @@
 export declare const minSecretLength = 10;
-export declare const hmacAlgorithm = "sha3-256";
 export declare const keySize = 32;
+export declare const hmacAlgorithm = "sha3-256";
+export declare const keyIterations = 1024;
+export declare const keySalt = "tWWFNS4n/3V0EUSG6xhyU/Z1";
 export declare const cipherAlgorithm = "aes-256-gcm";
 export declare const authTagSize = 16;
 export declare const ivTimestampSize = 6;
@@ -14,5 +16,7 @@ export declare const ivSize = 12;
 export declare const padSize = 8;
 export declare const padMinLength = 32;
 export declare const separator = ".";
-export declare const version = "A";
 export declare const re_valid_sealed: RegExp;
+export declare const version = "B";
+export declare const validVersions: Readonly<string[]>;
+export type SealVersion = 'A' | 'B';

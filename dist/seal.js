@@ -4,6 +4,7 @@ exports.seal = void 0;
 const node_crypto_1 = require("node:crypto");
 const constants_1 = require("./constants");
 const iv_1 = require("./iv");
+const key_1 = require("./key");
 const pad_1 = require("./pad");
 /**
  * Seal a string with a secret.
@@ -14,11 +15,7 @@ const pad_1 = require("./pad");
  * @returns The sealed string.
  */
 function seal(value, secret) {
-    if (!(secret && secret.length >= constants_1.minSecretLength)) {
-        throw new Error(`Secret is required and must be at least ${constants_1.minSecretLength} characters`);
-    }
-    const hmac = (0, node_crypto_1.createHmac)(constants_1.hmacAlgorithm, secret);
-    const keyBuffer = hmac.digest();
+    const keyBuffer = (0, key_1.deriveKey)(secret);
     const ivBytes = (0, iv_1.createIv)();
     const cipher = (0, node_crypto_1.createCipheriv)(constants_1.cipherAlgorithm, keyBuffer, ivBytes);
     const paddedValue = (0, pad_1.padValue)(value);

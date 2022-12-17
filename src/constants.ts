@@ -1,9 +1,9 @@
 // Key.
 export const minSecretLength = 10; // In characters.
 export const keySize = 32; // in bytes
-
-// Key type A.
-export const keyAHmacAlgorithm = 'sha3-256';
+export const hmacAlgorithm = 'sha3-256';
+export const keyIterations = 1024;
+export const keySalt = 'tWWFNS4n/3V0EUSG6xhyU/Z1';
 
 // Cipher.
 export const cipherAlgorithm = 'aes-256-gcm';
@@ -25,5 +25,9 @@ export const padMinLength = 32; // in bytes
 
 // Result.
 export const separator = '.';
-export const version = 'A';
-export const re_valid_sealed = /^A\.[a-zA-Z0-9/+]{21,22}\.[a-zA-Z0-9/+]{16}\.[a-zA-Z0-9/+]{42,}$/;
+export const re_valid_sealed = /^[AB]\.[a-zA-Z0-9/+]{21,22}\.[a-zA-Z0-9/+]{16}\.[a-zA-Z0-9/+]{42,}$/;
+
+// Version.
+export const version = 'B';
+export const validVersions: Readonly<string[]> = ['A', 'B'];
+export type SealVersion = 'A' | 'B';

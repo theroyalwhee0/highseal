@@ -1,7 +1,7 @@
 import { createCipheriv } from 'node:crypto';
 import { cipherAlgorithm, separator, version } from './constants';
 import { createIv } from './iv';
-import { deriveKeyA } from './key';
+import { deriveKey } from './key';
 import { padValue } from './pad';
 
 /**
@@ -13,7 +13,7 @@ import { padValue } from './pad';
  * @returns The sealed string.
  */
 export function seal(value: string, secret: string): string {
-    const keyBuffer = deriveKeyA(secret);
+    const keyBuffer = deriveKey(secret);
     const ivBytes = createIv();
     const cipher = createCipheriv(cipherAlgorithm, keyBuffer, ivBytes);
     const paddedValue = padValue(value);
