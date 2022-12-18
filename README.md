@@ -7,10 +7,12 @@ A library to seal and unseal a string value with a secret. The value is encrypte
 ## Installation
 `npm install @theroyalwhee0/highseal`  
 
+
 ## CLI
 The [Highseal CLI](https://www.npmjs.com/package/@theroyalwhee0/highseal-cli) install allows sealing and unsealing of values without writing code. 
 
 `npm install --global @theroyalwhee0/highseal-cli`
+
 
 ## Usage
 ```ts
@@ -23,7 +25,7 @@ console.info('Sealed Value:', sealed);
 console.info(`Value ${isSealed(sealed) ? 'appears' : 'does not appear'} to be sealed.`);
 const [err, unsealed] = unseal(sealed, secret);
 if(err) {
-    console.error('Unable to unseal value.');
+    console.error('Unable to unseal value:', err);
 } else {
     console.info('Unsealed Value:', unsealed);
 }

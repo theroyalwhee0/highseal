@@ -1,6 +1,6 @@
 {
   "name": "@theroyalwhee0/highseal-cli",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "HighSeal CLI: Seal a Value into an Encrypted String",
   "main": "dist/index.js",
   "author": "Adam Mill <hismajesty@theroyalwhee.com> (https://www.theroyalwhee.com)",
@@ -30,7 +30,7 @@
     "typescript": "4.9.3"
   },
   "dependencies": {
-    "@theroyalwhee0/highseal": "0.0.1",
+    "@theroyalwhee0/highseal": "0.1.0",
     "dotenv": "16.0.3",
     "yargs": "17.6.2"
   },

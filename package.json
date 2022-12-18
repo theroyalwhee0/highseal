@@ -1,6 +1,6 @@
 {
   "name": "@theroyalwhee0/highseal",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Seal a Value into an Encrypted String",
   "main": "dist/index.js",
   "author": "Adam Mill <hismajesty@theroyalwhee.com> (https://www.theroyalwhee.com)",
