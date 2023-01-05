@@ -38,7 +38,7 @@ Running ```npm run test``` will run the test suite. Running ```npm run test-watc
 
 ## Security Notes
 - This code has not been audited or verified by a third party.
-- The sealed values timestamp leak metadata of when they were generated.
+- The sealed values timestamps leak metadata of when they were generated.
 - The sealed values counters may leak metadata since incremented counters indicate batches.
 
 
