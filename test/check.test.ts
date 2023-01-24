@@ -19,6 +19,9 @@ describe('check', () => {
                     'a sealed blank value, version-B',
                     'B.cOe0e/HEfA6Ao7j7rzjwgQ.ABXCBD5NYHr4lvlp.LtpCMzPk7yi2bPq/c0VPGBW3MgNGOF3zKEq2JQEZvH8',
                 ], [
+                    'a sealed blank value, version-B with prefix',
+                    'highseal://B.cOe0e/HEfA6Ao7j7rzjwgQ.ABXCBD5NYHr4lvlp.LtpCMzPk7yi2bPq/c0VPGBW3MgNGOF3zKEq2JQEZvH8',
+                ], [
                     'a sealed value, version-B',
                     'B.dc7Hor7FUQKCtMggI+znoA.ABXCF2jgUWvdi5IS.CYExntjgW29eutzikL/fRSBzvfl0HEDQBDNfNiNsx0VMumota8GM9d6/bkv9yeo5jJDTMfMucgMpJIPSuKycwQ',
                 ], [

@@ -50,6 +50,6 @@ Running ```npm run test``` will run the test suite. Running ```npm run test-watc
 
 
 ## Legal & License
-Copyright 2022 Adam Mill
+Copyright 2022-2023 Adam Mill
 
 This library is released under Apache 2 license. See [LICENSE](https://github.com/theroyalwhee0/highseal/blob/main/LICENSE) for more details.

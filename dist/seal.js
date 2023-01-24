@@ -12,9 +12,11 @@ const pad_1 = require("./pad");
  * encrypted with authenticate encryption.
  * @param value The string to seal.
  * @param secret The secret to encrypt with. Must be at least 10 characters.
+ * @param options Seal options. Optional.
  * @returns The sealed string.
  */
-function seal(value, secret) {
+function seal(value, secret, options) {
+    const addPrefix = options?.prefix ?? false;
     const keyBuffer = (0, key_1.deriveKey)(secret);
     const ivBytes = (0, iv_1.createIv)();
     const cipher = (0, node_crypto_1.createCipheriv)(constants_1.cipherAlgorithm, keyBuffer, ivBytes);
@@ -26,9 +28,10 @@ function seal(value, secret) {
     const iv = ivBytes.toString('base64').replace(/=+$/, '');
     const encrypted = encryptedBytes.toString('base64').replace(/=+$/, '');
     const authTag = cipher.getAuthTag().toString('base64').replace(/=+$/, '');
-    const results = [
+    const joined = [
         constants_1.version, authTag, iv, encrypted,
     ].join(constants_1.separator);
+    const results = (addPrefix ? constants_1.prefix : '') + joined;
     return results;
 }
 exports.seal = seal;

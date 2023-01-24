@@ -8,6 +8,7 @@ import sinon from 'sinon';
 /**
  * Valid sealed format for Version-B.
  */
+const re_valid_prefixed_sealed = /^highseal:\/\/B\.[a-zA-Z0-9/+]{21,22}\.[a-zA-Z0-9/+]{16}\.[a-zA-Z0-9/+]{42,}$/;
 const re_valid_sealed_b = /^B\.[a-zA-Z0-9/+]{21,22}\.[a-zA-Z0-9/+]{16}\.[a-zA-Z0-9/+]{42,}$/;
 
 describe('seal', () => {
@@ -41,7 +42,7 @@ describe('seal', () => {
             const sealedBuffer = Buffer.from(encrypted, 'base64');
             expect(sealedBuffer.length).to.equal(32);
         });
-        it('should seal a value smaller than minimum paddin', () => {
+        it('should seal a value smaller than minimum padding', () => {
             const secret = 'marabou stork';
             const value = 'stork family';
             const result = seal(value, secret);
@@ -102,6 +103,23 @@ describe('seal', () => {
                 expect(sealedBuffer.length).to.be.greaterThan(idx);
                 expect(sealedBuffer.length % 8).to.equal(0);
             }
+        });
+        it('should seal with a prefix', () => {
+            const secret = 'marabou stork';
+            const value = 'A';
+            const result = seal(value, secret, {
+                prefix: true,
+            });
+            expect(result).to.be.a('string');
+            expect(result).to.match(re_valid_prefixed_sealed);
+            const noprefix = result.replace(/^highseal:\/\//, '');
+            expect(noprefix).to.not.equal(result);
+            const split = noprefix.split('.');
+            expect(split.length).to.equal(4);
+            const [ver, _authTag, _iv, encrypted] = split;
+            expect(ver).to.equal(version);
+            const sealedBuffer = Buffer.from(encrypted, 'base64');
+            expect(sealedBuffer.length).to.equal(32);
         });
     });
     describe('should handle times within the given epoch', () => {

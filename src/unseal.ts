@@ -1,7 +1,7 @@
 import { createDecipheriv } from 'node:crypto';
 import {
     authTagSize, cipherAlgorithm, ivSize,
-    padMinLength, re_valid_sealed, separator,
+    padMaxSize, re_valid_sealed,
 } from './constants';
 import { deriveKeyA, deriveKeyB } from './key';
 
@@ -12,10 +12,11 @@ import { deriveKeyA, deriveKeyB } from './key';
  * @returns A tuple of an error boolean and the unsealed value.
  */
 export function unseal(sealed: string, secret: string): [Error | undefined, string | undefined] {
-    if (!re_valid_sealed.test(sealed)) {
+    const match = re_valid_sealed.exec(sealed);
+    if (!match) {
         return [new Error('Invalid formatting'), ''];
     }
-    const [versionIdent, authTagEncoded, ivEncoded, valueEncoded] = sealed.split(separator);
+    const [, , versionIdent, authTagEncoded, ivEncoded, valueEncoded] = match;
     const authTagBuffer = Buffer.from(authTagEncoded, 'base64');
     const ivBuffer = Buffer.from(ivEncoded, 'base64');
     if (ivBuffer.length !== ivSize) {
@@ -51,8 +52,9 @@ export function unseal(sealed: string, secret: string): [Error | undefined, stri
         // Could indicate invalid IV, authTag, password, content, etc.
         return [err, ''];
     }
+    // NOTE: The padding removed after decryption. It is protected by the authtag.
     const paddingByte = decryptBuffer.at(-1);
-    if (paddingByte === undefined || paddingByte < 0 || paddingByte > padMinLength) {
+    if (paddingByte === undefined || paddingByte < 0 || paddingByte > padMaxSize) {
         return [new Error('Invalid padding bytes.'), ''];
     }
     const unpadded = decryptBuffer.subarray(0, -1 * paddingByte);

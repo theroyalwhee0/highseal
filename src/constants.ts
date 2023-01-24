@@ -22,10 +22,13 @@ export const ivSize = 12; // in bytes
 // Padding.
 export const padSize = 8; // in bytes
 export const padMinLength = 32; // in bytes
+export const padMaxSize = padMinLength; // The minimum total padded size is also the maximum amount of padding added.
 
 // Result.
+export const prefix = 'highseal://';
 export const separator = '.';
-export const re_valid_sealed = /^[AB]\.[a-zA-Z0-9/+]{21,22}\.[a-zA-Z0-9/+]{16}\.[a-zA-Z0-9/+]{42,}$/;
+export const re_valid_sealed = /^(highseal:\/\/)?([AB])\.([a-zA-Z0-9/+]{21,22})\.([a-zA-Z0-9/+]{16})\.([a-zA-Z0-9/+]{42,})$/;
+export const re_has_prefix = /^highseal:\/\//;
 
 // Version.
 export const version = 'B';
