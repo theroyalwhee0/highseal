@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validVersions = exports.version = exports.re_valid_sealed = exports.separator = exports.padMinLength = exports.padSize = exports.ivSize = exports.ivRandomSize = exports.ivMaxCounter = exports.ivCounterSize = exports.ivEpochEnd = exports.ivEpochStart = exports.ivMaxEpochTimestamp = exports.ivTimestampSize = exports.authTagSize = exports.cipherAlgorithm = exports.keySalt = exports.keyIterations = exports.hmacAlgorithm = exports.keySize = exports.minSecretLength = void 0;
+exports.validVersions = exports.version = exports.re_has_prefix = exports.re_valid_sealed = exports.separator = exports.prefix = exports.padMaxSize = exports.padMinLength = exports.padSize = exports.ivSize = exports.ivRandomSize = exports.ivMaxCounter = exports.ivCounterSize = exports.ivEpochEnd = exports.ivEpochStart = exports.ivMaxEpochTimestamp = exports.ivTimestampSize = exports.authTagSize = exports.cipherAlgorithm = exports.keySalt = exports.keyIterations = exports.hmacAlgorithm = exports.keySize = exports.minSecretLength = void 0;
 // Key.
 exports.minSecretLength = 10; // In characters.
 exports.keySize = 32; // in bytes
@@ -22,9 +22,12 @@ exports.ivSize = 12; // in bytes
 // Padding.
 exports.padSize = 8; // in bytes
 exports.padMinLength = 32; // in bytes
+exports.padMaxSize = exports.padMinLength; // The minimum total padded size is also the maximum amount of padding added.
 // Result.
+exports.prefix = 'highseal://';
 exports.separator = '.';
-exports.re_valid_sealed = /^[AB]\.[a-zA-Z0-9/+]{21,22}\.[a-zA-Z0-9/+]{16}\.[a-zA-Z0-9/+]{42,}$/;
+exports.re_valid_sealed = /^(highseal:\/\/)?([AB])\.([a-zA-Z0-9/+]{21,22})\.([a-zA-Z0-9/+]{16})\.([a-zA-Z0-9/+]{42,})$/;
+exports.re_has_prefix = /^highseal:\/\//;
 // Version.
 exports.version = 'B';
 exports.validVersions = ['A', 'B'];

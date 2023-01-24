@@ -1,8 +1,15 @@
 import { createCipheriv } from 'node:crypto';
-import { cipherAlgorithm, separator, version } from './constants';
+import { cipherAlgorithm, prefix, separator, version } from './constants';
 import { createIv } from './iv';
 import { deriveKey } from './key';
 import { padValue } from './pad';
+
+/**
+ * Seal options.
+ */
+export type SealOptions = {
+    prefix?: boolean // Defaults to false.
+};
 
 /**
  * Seal a string with a secret.
@@ -10,9 +17,11 @@ import { padValue } from './pad';
  * encrypted with authenticate encryption.
  * @param value The string to seal.
  * @param secret The secret to encrypt with. Must be at least 10 characters.
+ * @param options Seal options. Optional.
  * @returns The sealed string.
  */
-export function seal(value: string, secret: string): string {
+export function seal(value: string, secret: string, options?: SealOptions): string {
+    const addPrefix = options?.prefix ?? false;
     const keyBuffer = deriveKey(secret);
     const ivBytes = createIv();
     const cipher = createCipheriv(cipherAlgorithm, keyBuffer, ivBytes);
@@ -24,8 +33,9 @@ export function seal(value: string, secret: string): string {
     const iv = ivBytes.toString('base64').replace(/=+$/, '');
     const encrypted = encryptedBytes.toString('base64').replace(/=+$/, '');
     const authTag = cipher.getAuthTag().toString('base64').replace(/=+$/, '');
-    const results = [
+    const joined = [
         version, authTag, iv, encrypted,
     ].join(separator);
+    const results = (addPrefix ? prefix : '') + joined;
     return results;
 }

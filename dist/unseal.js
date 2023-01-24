@@ -11,10 +11,11 @@ const key_1 = require("./key");
  * @returns A tuple of an error boolean and the unsealed value.
  */
 function unseal(sealed, secret) {
-    if (!constants_1.re_valid_sealed.test(sealed)) {
+    const match = constants_1.re_valid_sealed.exec(sealed);
+    if (!match) {
         return [new Error('Invalid formatting'), ''];
     }
-    const [versionIdent, authTagEncoded, ivEncoded, valueEncoded] = sealed.split(constants_1.separator);
+    const [, , versionIdent, authTagEncoded, ivEncoded, valueEncoded] = match;
     const authTagBuffer = Buffer.from(authTagEncoded, 'base64');
     const ivBuffer = Buffer.from(ivEncoded, 'base64');
     if (ivBuffer.length !== constants_1.ivSize) {
@@ -52,8 +53,9 @@ function unseal(sealed, secret) {
         // Could indicate invalid IV, authTag, password, content, etc.
         return [err, ''];
     }
+    // NOTE: The padding removed after decryption. It is protected by the authtag.
     const paddingByte = decryptBuffer.at(-1);
-    if (paddingByte === undefined || paddingByte < 0 || paddingByte > constants_1.padMinLength) {
+    if (paddingByte === undefined || paddingByte < 0 || paddingByte > constants_1.padMaxSize) {
         return [new Error('Invalid padding bytes.'), ''];
     }
     const unpadded = decryptBuffer.subarray(0, -1 * paddingByte);

@@ -28,6 +28,16 @@ describe('unseal', () => {
         expect(err).to.equal(undefined);
         expect(value).to.equal('stork family');
     });
+    it('should unseal a value with a prefix', () => {
+        const secret = 'marabou stork';
+        const sealed = 'highseal://B.jqlL0Y4p93Ld1zw6++fGlg.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U';
+        const result = unseal(sealed, secret);
+        expect(result).to.be.an('array');
+        expect(result.length).to.equal(2);
+        const [err, value] = result;
+        expect(err).to.equal(undefined);
+        expect(value).to.equal('stork family');
+    });
     it('should unseal a value larger than minimum padding', () => {
         const secret = 'marabou stork';
         const sealed = 'B.Y2j7r5vURzn2uaq5YBNvjA.ABXCBZ4H2i3wwqWK.bZsXchluxpJBQ4OlUrYKL1emvt05+MAroyGRctO50zOZuCgBh+uRX6VY8hP4KxB8Ud6MgBZTncSUmQnR9vDr4Q';
