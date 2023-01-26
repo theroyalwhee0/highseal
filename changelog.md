@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed 
 
 
+## [0.2.0] - 2023-01-24
+### Changed
+- Made 'highseal://' prefix the default.
+
 ## [0.1.1] - 2023-01-24
 ### Added
 - Add optional 'highseal://' prefix support.

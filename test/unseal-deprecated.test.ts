@@ -5,7 +5,7 @@ import { unseal } from '../src/unseal';
 const dataA: Record<string, string> = {
     '': 'A.Yo7YEpKJtSnsTyO/GbEp4g.ABXCJq85pbFmCh10.7qWjNqwds/DF2c3lyCOc8qTFECL8ZkGeeeq7LfWSrWw',
     '...': 'A.sSd9eY3pQKISjIPXwXrAhg.ABXCJq86pbK6LymR.LYx0ouTaholcgvJ52A85PGlTBOepw6JJdTVb6YjWra4',
-    '......': 'A.kIRHjYe3hH/wqrASGyfQWQ.ABXCJq86pbNhQTO+.Fj2h8+Z03gsc/0uS15KS/MeMWZL7QRcdw8x2H26lqBk',
+    '......': 'highseal://A.kIRHjYe3hH/wqrASGyfQWQ.ABXCJq86pbNhQTO+.Fj2h8+Z03gsc/0uS15KS/MeMWZL7QRcdw8x2H26lqBk',
     '.........': 'A.QkKv98O22b1nYPA40HFELw.ABXCJq86pbQ+WAIw.Gt9lx0z34ua9TGX0CwitakRNe6lWOor9ypBqrCoW7WY',
     '............': 'A.2nSbrtseo6P8ulNNYHj1BQ.ABXCJq86pbV0GCDH.od1SGmP08dQ+URcoqkTSm97saQeNatmZT28fozzyfBY',
     '...............': 'A.OBIou/XSV5Nsl4Wk25Nktg.ABXCJq86pbYbuHNa.RZStTqoBjrEhdvRQSgqJHIJR+wg6WTUNK6VKcXn2Tw8',

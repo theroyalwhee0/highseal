@@ -16,7 +16,7 @@ const pad_1 = require("./pad");
  * @returns The sealed string.
  */
 function seal(value, secret, options) {
-    const addPrefix = options?.prefix ?? false;
+    const addPrefix = options?.prefix ?? true;
     const keyBuffer = (0, key_1.deriveKey)(secret);
     const ivBytes = (0, iv_1.createIv)();
     const cipher = (0, node_crypto_1.createCipheriv)(constants_1.cipherAlgorithm, keyBuffer, ivBytes);
