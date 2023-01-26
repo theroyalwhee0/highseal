@@ -10,7 +10,7 @@ describe('unseal', () => {
     });
     it('should unseal an empty value', () => {
         const secret = 'marabou stork';
-        const sealed = 'B.cOe0e/HEfA6Ao7j7rzjwgQ.ABXCBD5NYHr4lvlp.LtpCMzPk7yi2bPq/c0VPGBW3MgNGOF3zKEq2JQEZvH8';
+        const sealed = 'highseal://B.cOe0e/HEfA6Ao7j7rzjwgQ.ABXCBD5NYHr4lvlp.LtpCMzPk7yi2bPq/c0VPGBW3MgNGOF3zKEq2JQEZvH8';
         const result = unseal(sealed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
@@ -20,7 +20,7 @@ describe('unseal', () => {
     });
     it('should unseal a value smaller than minimum padding', () => {
         const secret = 'marabou stork';
-        const sealed = 'B.jqlL0Y4p93Ld1zw6++fGlg.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U';
+        const sealed = 'highseal://B.jqlL0Y4p93Ld1zw6++fGlg.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U';
         const result = unseal(sealed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
@@ -40,7 +40,7 @@ describe('unseal', () => {
     });
     it('should unseal a value larger than minimum padding', () => {
         const secret = 'marabou stork';
-        const sealed = 'B.Y2j7r5vURzn2uaq5YBNvjA.ABXCBZ4H2i3wwqWK.bZsXchluxpJBQ4OlUrYKL1emvt05+MAroyGRctO50zOZuCgBh+uRX6VY8hP4KxB8Ud6MgBZTncSUmQnR9vDr4Q';
+        const sealed = 'highseal://B.Y2j7r5vURzn2uaq5YBNvjA.ABXCBZ4H2i3wwqWK.bZsXchluxpJBQ4OlUrYKL1emvt05+MAroyGRctO50zOZuCgBh+uRX6VY8hP4KxB8Ud6MgBZTncSUmQnR9vDr4Q';
         const result = unseal(sealed, secret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);
@@ -50,7 +50,7 @@ describe('unseal', () => {
     });
     it('should fail to unseal given wrong password', () => {
         const wrongSecret = 'few natural enemies';
-        const sealed = 'B.jqlL0Y4p93Ld1zw6++fGlg.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U';
+        const sealed = 'highseal://B.jqlL0Y4p93Ld1zw6++fGlg.ABXCBSZAIs1Di0+U.kyUx0IIQOjJZ3ukpsCsQCGNDMF23NOzCgmuQ+M1Np+U';
         const result = unseal(sealed, wrongSecret);
         expect(result).to.be.an('array');
         expect(result.length).to.equal(2);

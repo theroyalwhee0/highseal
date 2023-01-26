@@ -8,7 +8,7 @@ import { padValue } from './pad';
  * Seal options.
  */
 export type SealOptions = {
-    prefix?: boolean // Defaults to false.
+    prefix?: boolean // Defaults to true.
 };
 
 /**
@@ -21,7 +21,7 @@ export type SealOptions = {
  * @returns The sealed string.
  */
 export function seal(value: string, secret: string, options?: SealOptions): string {
-    const addPrefix = options?.prefix ?? false;
+    const addPrefix = options?.prefix ?? true;
     const keyBuffer = deriveKey(secret);
     const ivBytes = createIv();
     const cipher = createCipheriv(cipherAlgorithm, keyBuffer, ivBytes);
